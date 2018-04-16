@@ -1,0 +1,16 @@
+2018-04-15 23:42:58.5992 | FATAL | StudyBuddy.Core.BaseController | Invalid column name 'Verified'.
+2018-04-15 23:43:05.1647 | FATAL | StudyBuddy.Core.BaseController | Invalid column name 'Verified'.
+2018-04-15 23:43:09.9293 | FATAL | StudyBuddy.Core.BaseController | Invalid column name 'Verified'.
+2018-04-16 00:09:56.5420 | FATAL | StudyBuddy.Core.BaseController | Invalid column name 'Verified'.
+2018-04-16 00:10:05.6720 | FATAL | StudyBuddy.Core.BaseController | Invalid column name 'Verified'.
+2018-04-16 13:14:26.2705 | FATAL | StudyBuddy.Core.BaseController | Procedure or function 'Student_Update' expects parameter '@ProfilePic', which was not supplied.
+2018-04-16 13:14:26.3588 | FATAL | StudyBuddy.Core.BaseController | Procedure or function 'Student_Update' expects parameter '@ProfilePic', which was not supplied.
+2018-04-16 13:14:26.4992 | FATAL | StudyBuddy.Core.BaseController | Procedure or function 'Student_Update' expects parameter '@ProfilePic', which was not supplied.
+2018-04-16 13:42:59.5710 | FATAL | StudyBuddy.Core.BaseController | Procedure or function 'Student_Update' expects parameter '@ProfilePic', which was not supplied.
+2018-04-16 13:45:40.0868 | FATAL | StudyBuddy.Core.BaseController | Procedure or function 'Student_Update' expects parameter '@ProfilePic', which was not supplied.
+2018-04-16 13:46:29.1614 | FATAL | StudyBuddy.Core.BaseController | Procedure or function 'Student_Update' expects parameter '@ProfilePic', which was not supplied.
+2018-04-16 13:48:03.2793 | FATAL | StudyBuddy.Core.BaseController | Procedure or function 'Student_Update' expects parameter '@ProfilePic', which was not supplied.
+2018-04-16 15:17:31.6560 | FATAL | StudyBuddy.Core.BaseController | Value cannot be null.
+Parameter name: addresses
+2018-04-16 15:19:55.9088 | FATAL | StudyBuddy.Core.BaseController | Value cannot be null.
+Parameter name: addresses

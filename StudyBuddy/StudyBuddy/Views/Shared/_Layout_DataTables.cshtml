@@ -1,0 +1,52 @@
+﻿@model List<StudyBuddy.Models.Student>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    @{ Html.RenderPartial("_Meta"); }
+
+    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/Content/DataTables")
+    @Styles.Render("~/Content/base")
+    @Styles.Render("~/Content/custom")
+    @RenderSection("styles", required: false)
+</head>
+<body>
+    @{ Html.RenderPartial("_Header"); }
+    <div class="sh-mainpanel">
+        @RenderBody()
+        <div class="sh-footer">
+            <div>Copyright &copy; @DateTime.Now.Year. All Rights Reserved.</div>
+            <div class="mg-t-10 mg-md-t-0">Designed by: <a href="http://themepixels.me">ThemePixels</a></div>
+        </div><!-- sh-footer -->
+    </div><!-- sh-mainpanel -->
+
+    @Scripts.Render("~/bundles/base")
+    @Scripts.Render("~/bundles/DataTables")
+    <script>
+        $(function () {
+            'use strict';
+
+            $('#datatable1').DataTable({
+                responsive: true,
+                language: {
+                    searchPlaceholder: 'Search...',
+                    sSearch: '',
+                    lengthMenu: '_MENU_ items/page',
+                }
+            });
+
+            $('#datatable2').DataTable({
+                bLengthChange: false,
+                searching: false,
+                responsive: true
+            });
+
+            // Select2
+            $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });
+
+        });
+    </script>
+    @{ Html.RenderPartial("_Alerts"); }
+    @RenderSection("scripts", required: false)
+</body>
+</html>

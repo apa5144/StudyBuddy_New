@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    @{ Html.RenderPartial("_Meta"); }
+
+    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/Content/base")
+    @Styles.Render("~/Content/custom")
+    
+    <link href="~/Content/Shamcey/select2/css/select2.min.css" rel="stylesheet" />
+    @RenderSection("styles", required: false)
+</head>
+
+<body class="bg-gray-900">
+    @RenderBody()
+
+    @Scripts.Render("~/bundles/base")
+    @{ Html.RenderPartial("_Alerts"); }
+    <script src="~/Scripts/Shamcey/select2/js/select2.min.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>
