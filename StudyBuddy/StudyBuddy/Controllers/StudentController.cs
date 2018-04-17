@@ -58,8 +58,7 @@ namespace StudyBuddy.Controllers
                                 }
                                 else
                                 {
-                                    var path = Path.Combine(Server.MapPath("~/Content/UserProfilePictures/"), fileName);
-                                    file.SaveAs(path);
+                                    img.Save(Path.Combine(Server.MapPath("~/Content/UserProfilePictures/"), fileName));
                                 }                                
                             }
                             else
