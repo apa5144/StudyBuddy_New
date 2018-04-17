@@ -72,7 +72,7 @@ namespace StudyBuddy.Controllers
                 }
 
                 UnitOfWork.Student.Update(model.Id, model.FirstName, model.LastName, model.PhoneNumber, model.Availability, model.ProfilePic);
-                Success("Information successfully changed. Please relog to reflect changes.");
+                Success("Information successfully changed.");
                 return View(model);
             }
             catch (Exception ex)
