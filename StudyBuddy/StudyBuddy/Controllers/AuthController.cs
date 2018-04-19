@@ -262,7 +262,7 @@ namespace StudyBuddy.Controllers
             var claims = new List<Claim>();
 
             // create required claims
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, student.Id.ToString()));
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, student.Guid.ToString()));
             claims.Add(new Claim(ClaimTypes.Name, string.Format("{0} {1}", student.FirstName, student.LastName)));
             claims.Add(new Claim(ClaimTypes.Email, student.Email));
             claims.Add(new Claim(ClaimTypes.Role, student.SecurityLevel.ToString()));

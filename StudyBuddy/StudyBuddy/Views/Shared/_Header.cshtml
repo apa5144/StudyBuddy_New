@@ -1,5 +1,5 @@
 ﻿@{
-    var id = StudyBuddy.Core.Helpers.GetId(User);
+    var guid = StudyBuddy.Core.Helpers.GetGuid(User);
     var name = StudyBuddy.Core.Helpers.GetFullName(User);
     var email = StudyBuddy.Core.Helpers.GetEmail(User);
     var profilePicture = StudyBuddy.Core.Helpers.GetPicture(User);
@@ -150,7 +150,7 @@
         </div>
         <div class="dropdown dropdown-profile">
             <a href="" data-toggle="dropdown" class="dropdown-link">
-                <img src="~/Content/UserProfilePictures/@profilePicture" class="wd-60 rounded-circle" alt="">
+                <img src="~/Content/UserProfilePictures/@profilePicture" class="wd-60 ht-60 rounded-circle" alt="">
             </a>
             <div class="dropdown-menu dropdown-menu-right">
                 <div class="media align-items-center">
@@ -162,8 +162,8 @@
                 </div><!-- media -->
                 <hr>
                 <ul class="dropdown-profile-nav">
-                    <li><a href="~/Student/EditProfile/@id"><i class="icon ion-ios-person"></i> Edit Profile</a></li>
-                    <li><a href="~/Student/EditLoginInformation/@id"><i class="icon ion-ios-gear"></i> Edit Login Information</a></li>
+                    <li><a href="~/Student/EditProfile/@guid"><i class="icon ion-ios-person"></i> Edit Profile</a></li>
+                    <li><a href="~/Student/EditLoginInformation/@guid"><i class="icon ion-ios-gear"></i> Edit Login Information</a></li>
                     <li><a href="~/Auth/Logout"><i class="icon ion-power"></i> Sign Out</a></li>
                 </ul>
             </div><!-- dropdown-menu -->

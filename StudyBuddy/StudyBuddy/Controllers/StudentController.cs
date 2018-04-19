@@ -2,6 +2,8 @@
 using StudyBuddy.Models;
 using System;
 using System.IO;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Helpers;
@@ -15,11 +17,11 @@ namespace StudyBuddy.Controllers
         public Mail _mail = new Mail();
 
         // GET: Student/EditProfile
-        public ActionResult EditProfile(int id)
+        public ActionResult EditProfile(string guid)
         {
             try
             {
-                var model = UnitOfWork.Student.GetOne(id);
+                var model = UnitOfWork.Student.GetOne(guid);
                 return View(model);
             }
             catch (Exception ex)
@@ -59,8 +61,7 @@ namespace StudyBuddy.Controllers
                                 }
                                 else
                                 {
-                                    var path = Path.Combine(Server.MapPath("~/Content/UserProfilePictures/"), fileName);
-                                    file.SaveAs(path);
+                                    img.Save(Path.Combine(Server.MapPath("~/Content/UserProfilePictures/"), fileName));
                                 }                                
                             }
                             else
@@ -74,7 +75,7 @@ namespace StudyBuddy.Controllers
                 }
 
                 UnitOfWork.Student.Update(model.Id, model.FirstName, model.LastName, model.PhoneNumber, model.Availability, model.ProfilePic);
-                Success("Information successfully changed. Please relog to reflect changes.");
+                Success("Information successfully changed.");
                 return View(model);
             }
             catch (Exception ex)
@@ -86,11 +87,11 @@ namespace StudyBuddy.Controllers
         }
 
         // GET: Student/EditProfile
-        public ActionResult EditLoginInformation(int id)
+        public ActionResult EditLoginInformation(string guid)
         {
             try
             {
-                var model = UnitOfWork.Student.GetOne(id);
+                var model = UnitOfWork.Student.GetOne(guid);
                 model.Password = null;
                 model.ConfirmPassword = null;
                 return View(model);

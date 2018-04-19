@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using StudyBuddy.Models;
+using System.Security.Principal;
 
 namespace StudyBuddy.DAL.Interfaces
 {
@@ -7,7 +8,7 @@ namespace StudyBuddy.DAL.Interfaces
     {
         List<Student> GetAll();
 
-        Student GetOne(int id);
+        Student GetOne(string guid);
 
         Student Create(string firstName, string lastName, string email, string password, string guid);
 
