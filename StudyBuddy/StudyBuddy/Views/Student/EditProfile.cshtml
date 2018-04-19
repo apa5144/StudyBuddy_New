@@ -4,7 +4,7 @@
     ViewBag.Title = "Edit Profile";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var id = StudyBuddy.Core.Helpers.GetId(User);
+    var guid = StudyBuddy.Core.Helpers.GetGuid(User);
     var profilePicture = StudyBuddy.Core.Helpers.GetPicture(User);
 }
 @section scripts
@@ -18,7 +18,7 @@
 
 @using (Html.BeginForm("EditProfile", "Student", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Guid)
     @Html.AntiForgeryToken()
     <div class="sh-breadcrumb">
         <nav class="breadcrumb">
@@ -91,7 +91,7 @@
         </div><!-- row -->
         <hr class="mg-y-30">
         <button class="btn btn-success pd-x-20 mg-r-2" type="submit">Save Changes</button>
-        <a class="btn btn-secondary pd-x-20" href="~/Student/Deactivate/@id">Deactivate My Account</a>
+        <a class="btn btn-secondary pd-x-20" href="~/Student/Deactivate/@guid">Deactivate My Account</a>
         <hr class="mg-t-30">
 
     </div><!-- sh-pagebody -->

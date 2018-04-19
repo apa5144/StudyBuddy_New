@@ -1,6 +1,5 @@
 ﻿using System.Web.Mvc;
 using StudyBuddy.Core;
-using StudyBuddy.Models;
 using StudyBuddy.DAL.Common;
 
 namespace StudyBuddy.Controllers

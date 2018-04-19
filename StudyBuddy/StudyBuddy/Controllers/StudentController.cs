@@ -2,6 +2,8 @@
 using StudyBuddy.Models;
 using System;
 using System.IO;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Text.RegularExpressions;
 using System.Web.Helpers;
 using System.Web.Mvc;
@@ -14,11 +16,11 @@ namespace StudyBuddy.Controllers
         public Mail _mail = new Mail();
 
         // GET: Student/EditProfile
-        public ActionResult EditProfile(int id)
+        public ActionResult EditProfile(string guid)
         {
             try
             {
-                var model = UnitOfWork.Student.GetOne(id);
+                var model = UnitOfWork.Student.GetOne(guid);
                 return View(model);
             }
             catch (Exception ex)
@@ -84,11 +86,11 @@ namespace StudyBuddy.Controllers
         }
 
         // GET: Student/EditProfile
-        public ActionResult EditLoginInformation(int id)
+        public ActionResult EditLoginInformation(string guid)
         {
             try
             {
-                var model = UnitOfWork.Student.GetOne(id);
+                var model = UnitOfWork.Student.GetOne(guid);
                 model.Password = null;
                 model.ConfirmPassword = null;
                 return View(model);

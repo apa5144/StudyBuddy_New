@@ -2,6 +2,7 @@
 using BLToolkit.DataAccess;
 using StudyBuddy.Models;
 using StudyBuddy.DAL.Interfaces;
+using System.Security.Principal;
 
 namespace StudyBuddy.DAL.Services
 {
@@ -11,7 +12,7 @@ namespace StudyBuddy.DAL.Services
         public abstract List<Student> GetAll();
 
         [SprocName("Student_GetOne")]
-        public abstract Student GetOne(int id);
+        public abstract Student GetOne(string guid);
 
         [SprocName("Student_Delete")]
         public abstract void Delete(int id);
