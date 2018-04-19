@@ -45,5 +45,8 @@ namespace StudyBuddy.DAL.Services
 
         [SprocName("Student_GetByEmail")]
         public abstract Student GetByEmail(string email);
+
+        [SprocName("Student_Deactivate")]
+        public abstract Student Deactivate(string guid);
     }
 }

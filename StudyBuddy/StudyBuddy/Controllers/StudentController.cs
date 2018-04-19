@@ -3,6 +3,7 @@ using StudyBuddy.Models;
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
 
@@ -116,6 +117,34 @@ namespace StudyBuddy.Controllers
                 Danger("Error changing login information");
                 return RedirectToAction("EditLoginInformation", "Student", model);
             }
+        }
+
+        public ActionResult Deactivate(string guid)
+        {
+                try
+                {
+                    var student = new Student();
+                    student = UnitOfWork.Student.GetByGuid(guid);
+
+                    UnitOfWork.Student.Deactivate(guid);
+
+                    var ctx = Request.GetOwinContext();
+                    var authManager = ctx.Authentication;
+
+                    authManager.SignOut("ApplicationCookie");
+                    Information("Your account has been successfully deactivated.");
+                    return RedirectToAction("Login", "Auth");
+
+               
+                  
+                }
+                catch (Exception ex)
+                {
+                    Logger.Fatal(ex.Message);
+                    Danger("An error occured while trying to deactivate email.");
+                    return RedirectToAction("Login", "Auth");
+                }
+
         }
 
         //[HttpPost]
