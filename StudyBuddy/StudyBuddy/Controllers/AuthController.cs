@@ -173,7 +173,7 @@ namespace StudyBuddy.Controllers
 
                 password = Cryption.Encrypt(model.Password);
 
-                UnitOfWork.Student.UpdatePasswordById(model.Id, password);
+                UnitOfWork.Student.UpdatePasswordByGuid(model.Guid, password);
                 _mail.SendForgotPasswordNotification("do-not-reply@studybuddy.com", model.Email, "Password change notification", model.FirstName);
 
                 Success(string.Format("Password successfully changed.", model.Email));
@@ -238,7 +238,7 @@ namespace StudyBuddy.Controllers
                     else
                     {
                         IdentitySignin(student);
-                        return RedirectToAction("Index", "Home", model.Id);
+                        return RedirectToAction("Index", "Home");
                     }
                 }
                 else

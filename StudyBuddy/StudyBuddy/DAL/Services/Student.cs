@@ -29,8 +29,8 @@ namespace StudyBuddy.DAL.Services
         [SprocName("Student_DoesEmailExist")]
         public abstract bool DoesEmailExist(string email);
 
-        [SprocName("Student_UpdatePasswordById")]
-        public abstract void UpdatePasswordById(int id, string newPassword);
+        [SprocName("Student_UpdatePasswordByGuid")]
+        public abstract void UpdatePasswordByGuid(string guid, string newPassword);
 
         [SprocName("Student_UpdateEmailById")]
         public abstract void UpdateEmailById(int id, string newEmail);

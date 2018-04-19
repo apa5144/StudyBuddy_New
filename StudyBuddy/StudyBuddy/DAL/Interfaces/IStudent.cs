@@ -20,7 +20,7 @@ namespace StudyBuddy.DAL.Interfaces
 
         bool DoesEmailExist(string email);
 
-        void UpdatePasswordById(int id, string newPassword);
+        void UpdatePasswordByGuid(string guid, string newPassword);
 
         void UpdateEmailById(int id, string newEmail);
 
