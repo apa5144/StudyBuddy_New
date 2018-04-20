@@ -176,7 +176,7 @@ namespace StudyBuddy.Controllers
                 UnitOfWork.Student.UpdatePasswordByGuid(model.Guid, password);
                 _mail.SendForgotPasswordNotification("do-not-reply@studybuddy.com", model.Email, "Password change notification", model.FirstName);
 
-                Success(string.Format("Password successfully changed.", model.Email));
+                Success("Password successfully changed.");
 
                 return RedirectToAction("Login", "Auth");
             }

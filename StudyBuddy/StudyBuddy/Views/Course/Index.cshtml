@@ -1,14 +1,14 @@
-﻿@model List<StudyBuddy.Models.Student>
+﻿@model List<StudyBuddy.Models.Course>
 
 @{
-    ViewBag.Title = "Students";
+    ViewBag.Title = "Courses";
     Layout = "~/Views/Shared/_Layout_DataTables.cshtml";
 }
 
 <div class="sh-breadcrumb">
     <nav class="breadcrumb">
         <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">Study Buddy</a>
-        <span class="breadcrumb-item active">Student List</span>
+        <span class="breadcrumb-item active">Course List</span>
     </nav>
 </div><!-- sh-breadcrumb -->
 <div class="sh-pagetitle">
@@ -21,7 +21,7 @@
     <div class="sh-pagetitle-left">
         <div class="sh-pagetitle-icon"><i class="icon ion-ios-home"></i></div>
         <div class="sh-pagetitle-title">
-            <span>List of all students</span>
+            <span>List of all Course</span>
             <h2>@ViewBag.Title</h2>
         </div><!-- sh-pagetitle-left-title -->
     </div><!-- sh-pagetitle-left -->
@@ -33,9 +33,9 @@
             <thead>
             <tr>
                 <th class="wd-15p">Id</th>
-                <th class="wd-15p">First Name</th>
-                <th class="wd-20p">Last Name</th>
-                <th class="wd-20p">Email</th>
+                <th class="wd-15p">Subject</th>
+                <th class="wd-20p">Number</th>
+                <th class="wd-20p">Title</th>
             </tr>
             </thead>
             <tbody>
@@ -45,9 +45,9 @@
                     {
                     <tr>
                         <td>@Html.DisplayFor(modelItem => item.Id)</td>
-                        <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
-                        <td>@Html.DisplayFor(modelItem => item.LastName)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Subject)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Number)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Title)</td>
                     </tr>
                     }
                 }

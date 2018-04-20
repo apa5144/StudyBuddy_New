@@ -212,6 +212,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.cs" />
     <Compile Include="Controllers\AuthController.cs" />
+    <Compile Include="Controllers\CourseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="Core\Alert.cs" />
@@ -343,11 +344,12 @@
     <Content Include="Views\Shared\_Header.cshtml" />
     <Content Include="Views\Shared\_Meta.cshtml" />
     <Content Include="Views\Auth\Signup.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Student\EditProfile.cshtml" />
     <Content Include="Views\Auth\ForgotPassword.cshtml" />
     <Content Include="Views\Auth\ResetPassword.cshtml" />
     <Content Include="Views\Shared\Unauthorized.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Course\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
