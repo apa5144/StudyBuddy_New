@@ -32,6 +32,6 @@ namespace StudyBuddy.DAL.Interfaces
 
         Student GetByEmail(string email);
 
-        Student Deactivate(string guid);
+       void Deactivate(string guid);
     }
 }

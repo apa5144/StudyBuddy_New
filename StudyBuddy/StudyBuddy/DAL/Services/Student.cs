@@ -48,6 +48,6 @@ namespace StudyBuddy.DAL.Services
         public abstract Student GetByEmail(string email);
 
         [SprocName("Student_Deactivate")]
-        public abstract Student Deactivate(string guid);
+        public abstract void Deactivate(string guid);
     }
 }

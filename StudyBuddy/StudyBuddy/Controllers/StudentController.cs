@@ -124,8 +124,8 @@ namespace StudyBuddy.Controllers
         {
                 try
                 {
-                    var student = new Student();
-                    student = UnitOfWork.Student.GetByGuid(guid);
+                    //var student = new Student();
+                    //student = UnitOfWork.Student.GetByGuid(guid);
 
                     UnitOfWork.Student.Deactivate(guid);
 
