@@ -149,26 +149,7 @@ namespace StudyBuddy.Controllers
 
         }
 
-        public ActionResult Reactivate(string guid)
-        {
-            try
-            {
-                var student = UnitOfWork.Student.GetByGuid(guid);
-
-                UnitOfWork.Student.VerifyByGuid(guid);
-
-                _mail.SendReactivationMail("do-not-reply@studybuddy.com", student.Email, "Reactivation Notice", guid, student.FirstName);
-
-                Information("Your account has been successfully reactivated.");
-                return RedirectToAction("Login", "Auth");
-            }
-            catch (Exception ex)
-            {
-                Logger.Fatal(ex.Message);
-                Danger("An error occured while trying to reactivate email.");
-                return RedirectToAction("Login", "Auth");
-            }
-        }
+       
         //[HttpPost]
         //[ValidateAntiForgeryToken]
         //public ActionResult ChangeEmail(int id, string newEmail)
