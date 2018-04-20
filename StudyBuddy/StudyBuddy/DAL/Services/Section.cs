@@ -5,7 +5,7 @@ using StudyBuddy.DAL.Interfaces;
 
 namespace StudyBuddy.DAL.Services
 {
-    public abstract class SectionService : DataAccessor
+    public abstract class SectionService : DataAccessor, ISection
     {
         [SprocName("Section_GetAll")]
         public abstract List<Section> GetAll();

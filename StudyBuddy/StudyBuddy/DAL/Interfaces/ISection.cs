@@ -7,12 +7,12 @@ namespace StudyBuddy.DAL.Interfaces
     {
         List<Section> GetAll();
 
-        Section GetOne(int Id);
+        Section GetOne(int id);
 
         Section Create(string section, string instructor);
 
-        void Delete(int section_Id);
+        void Delete(int id);
 
-        Section Update(int section_Id ,string instructor);
+        Section Update(int id ,string section, string instructor);
     }
 }
