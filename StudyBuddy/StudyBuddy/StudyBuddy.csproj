@@ -223,7 +223,13 @@
     <Compile Include="Core\Overrides.cs" />
     <Compile Include="Core\WebUtilities.cs" />
     <Compile Include="DAL\Common\UnitOfWork.cs" />
+    <Compile Include="DAL\Interfaces\ICourse.cs" />
+    <Compile Include="DAL\Interfaces\IRoster.cs" />
+    <Compile Include="DAL\Interfaces\ISection.cs" />
     <Compile Include="DAL\Interfaces\IStudent.cs" />
+    <Compile Include="DAL\Services\Section.cs" />
+    <Compile Include="DAL\Services\Roster.cs" />
+    <Compile Include="DAL\Services\Course.cs" />
     <Compile Include="DAL\Services\Student.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
