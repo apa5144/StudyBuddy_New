@@ -62,7 +62,7 @@ namespace StudyBuddy.Controllers
                                 else
                                 {
                                     img.Save(Path.Combine(Server.MapPath("~/Content/UserProfilePictures/"), fileName));
-                                }                                
+                                }
                             }
                             else
                             {
@@ -122,30 +122,30 @@ namespace StudyBuddy.Controllers
 
         public ActionResult Deactivate(string guid)
         {
-                try
-                {
-                    //var student = new Student();
-                    var student = UnitOfWork.Student.GetByGuid(guid);
+            try
+            {
+                //var student = new Student();
+                var student = UnitOfWork.Student.GetByGuid(guid);
 
-                    UnitOfWork.Student.Deactivate(guid);
+                UnitOfWork.Student.Deactivate(guid);
 
-                    var ctx = Request.GetOwinContext();
-                    var authManager = ctx.Authentication;
+                var ctx = Request.GetOwinContext();
+                var authManager = ctx.Authentication;
 
-                    authManager.SignOut("ApplicationCookie");
-                    Information("Your account has been successfully deactivated.");
-                    _mail.SendDeactivationMail("do-not-reply@studybuddy.com", student.Email, "Deactivation Notice", guid, student.FirstName);
+                authManager.SignOut("ApplicationCookie");
+                Information("Your account has been successfully deactivated.");
+                _mail.SendDeactivationMail("do-not-reply@studybuddy.com", student.Email, "Deactivation Notice", guid, student.FirstName);
                 return RedirectToAction("Login", "Auth");
-                    
+
 
 
             }
-                catch (Exception ex)
-                {
-                    Logger.Fatal(ex.Message);
-                    Danger("An error occured while trying to deactivate email.");
-                    return RedirectToAction("Login", "Auth");
-                }
+            catch (Exception ex)
+            {
+                Logger.Fatal(ex.Message);
+                Danger("An error occured while trying to deactivate email.");
+                return RedirectToAction("Login", "Auth");
+            }
 
         }
 
@@ -155,16 +155,12 @@ namespace StudyBuddy.Controllers
             {
                 var student = UnitOfWork.Student.GetByGuid(guid);
 
-                UnitOfWork.Student.Reactivate(guid);
+                UnitOfWork.Student.VerifyByGuid(guid);
 
-                var ctx = Request.GetOwinContext();
-                var authManager = ctx.Authentication;
-
-                authManager.SignOut("ApplicationCookie");
-                Information("Your account has been successfully reactivated.");
                 _mail.SendReactivationMail("do-not-reply@studybuddy.com", student.Email, "Reactivation Notice", guid, student.FirstName);
-                return RedirectToAction("Login", "Auth");
 
+                Information("Your account has been successfully reactivated.");
+                return RedirectToAction("Login", "Auth");
             }
             catch (Exception ex)
             {
