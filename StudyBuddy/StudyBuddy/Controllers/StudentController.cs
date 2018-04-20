@@ -125,7 +125,7 @@ namespace StudyBuddy.Controllers
                 try
                 {
                     //var student = new Student();
-                    //student = UnitOfWork.Student.GetByGuid(guid);
+                    var student = UnitOfWork.Student.GetByGuid(guid);
 
                     UnitOfWork.Student.Deactivate(guid);
 
@@ -134,11 +134,12 @@ namespace StudyBuddy.Controllers
 
                     authManager.SignOut("ApplicationCookie");
                     Information("Your account has been successfully deactivated.");
-                    return RedirectToAction("Login", "Auth");
+                    _mail.SendDeactivationMail("do-not-reply@studybuddy.com", student.Email, "Deactivation Notice", guid, student.FirstName);
+                return RedirectToAction("Login", "Auth");
+                    
 
-               
-                  
-                }
+
+            }
                 catch (Exception ex)
                 {
                     Logger.Fatal(ex.Message);
