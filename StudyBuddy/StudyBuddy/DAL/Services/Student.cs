@@ -21,7 +21,7 @@ namespace StudyBuddy.DAL.Services
         public abstract Student Create(string firstName, string lastName, string email, string password, string guid);
 
         [SprocName("Student_Update")]
-        public abstract Student Update(string guid, string firstName, string lastName, long phoneNumber, bool availability, string profilePic);
+        public abstract Student Update(string guid, string firstName, string lastName, long phoneNumber, string profilePic);
 
         [SprocName("Student_GetByCredentials")]
         public abstract Student GetByCredentials(string email, string password);
@@ -55,5 +55,8 @@ namespace StudyBuddy.DAL.Services
 
         [SprocName("Student_RemoveProfilePictureByGuid")]
         public abstract void RemoveProfilePictureByGuid(string guid);
+
+        [SprocName("Student_UpdateAvailabilityByGuid")]
+        public abstract void UpdateAvailabilityByGuid(string guid);
     }
 }

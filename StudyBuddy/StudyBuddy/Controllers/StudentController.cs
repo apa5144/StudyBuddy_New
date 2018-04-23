@@ -79,8 +79,13 @@ namespace StudyBuddy.Controllers
                         model.ProfilePic = fileName;
                     }
                 }
+                if(string.IsNullOrWhiteSpace(model.ProfilePic))
+                {
+                    var student = UnitOfWork.Student.GetOne(guid);
+                    model.ProfilePic = student.ProfilePic;
+                }
 
-                UnitOfWork.Student.Update(guid, model.FirstName, model.LastName, model.PhoneNumber, model.Availability, model.ProfilePic);
+                UnitOfWork.Student.Update(guid, model.FirstName, model.LastName, model.PhoneNumber, model.ProfilePic);
                 Success("Information successfully changed.");
                 return View(model);
             }
@@ -244,11 +249,21 @@ namespace StudyBuddy.Controllers
         [HttpPost]
         public JsonResult RemoveProfilePicture()
         {
-            var claim = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier);
+            var guid = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            UnitOfWork.Student.RemoveProfilePictureByGuid(claim.Value);
+            UnitOfWork.Student.RemoveProfilePictureByGuid(guid);
 
             return Json(new { success = false, JsonRequestBehavior.AllowGet });
+        }
+
+        [HttpPost]
+        public JsonResult UpdateAvailability()
+        {
+            var guid = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            UnitOfWork.Student.UpdateAvailabilityByGuid(guid);
+
+            return Json(new { success = true });
         }
     }
 }

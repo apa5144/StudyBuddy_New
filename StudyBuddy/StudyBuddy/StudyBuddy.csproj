@@ -224,10 +224,12 @@
     <Compile Include="Core\Overrides.cs" />
     <Compile Include="Core\WebUtilities.cs" />
     <Compile Include="DAL\Common\UnitOfWork.cs" />
+    <Compile Include="DAL\Interfaces\IHeader.cs" />
     <Compile Include="DAL\Interfaces\ICourse.cs" />
     <Compile Include="DAL\Interfaces\IRoster.cs" />
     <Compile Include="DAL\Interfaces\ISection.cs" />
     <Compile Include="DAL\Interfaces\IStudent.cs" />
+    <Compile Include="DAL\Services\Header.cs" />
     <Compile Include="DAL\Services\Section.cs" />
     <Compile Include="DAL\Services\Roster.cs" />
     <Compile Include="DAL\Services\Course.cs" />
@@ -237,6 +239,7 @@
     </Compile>
     <Compile Include="Models\AddCourseViewModel.cs" />
     <Compile Include="Models\Course.cs" />
+    <Compile Include="Models\HeaderViewModel.cs" />
     <Compile Include="Models\Roster.cs" />
     <Compile Include="Models\RosterLatestFiveViewModel.cs" />
     <Compile Include="Models\RosterViewModel.cs" />

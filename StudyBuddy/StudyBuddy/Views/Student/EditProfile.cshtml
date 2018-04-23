@@ -4,15 +4,11 @@
     ViewBag.Title = "Edit Profile";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var profilePicture = StudyBuddy.Core.Helpers.GetPicture(User);
+    var header = StudyBuddy.Core.Helpers.GetHeader(User);
+    var profilePicture = string.IsNullOrWhiteSpace(header.ProfilePic) ? "noprofilepicture.jpg" : header.ProfilePic;
 }
-@section scripts
-{
+@section Scripts {
     <script>
-        $(function () {
-            $('#toggle-one').bootstrapToggle();
-        })
-
         function removeProfilePicture() {
             $.ajax({
                 url: '/Student/RemoveProfilePicture',
@@ -21,6 +17,14 @@
             })
             window.location.href = '@Url.Action("EditProfile", "Student")';
         };
+
+        function updateAvailability() {
+            $.ajax({
+                url: '/Student/UpdateAvailability',
+                type: "POST",
+                dataType: "JSON"
+            })
+        };
     </script>
 }
 
@@ -28,6 +32,7 @@
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(model => model.ProfilePic)
+    @Html.HiddenFor(model => model.Availability)
     <div class="sh-breadcrumb">
         <nav class="breadcrumb">
             <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">Study Buddy</a>
@@ -93,10 +98,17 @@
                                 @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
                             </div><!-- col-8 -->
                         </div><!-- form-group -->
-                        <div class="form-group row align-items-center">
+                        <div class="form-group row align-items-center">                            
                             <label class="mg-b-0 col-4 tx-right">@Html.LabelFor(model => model.Availability):</label>
                             <div class="col-6">
-                                @Html.CheckBoxFor(model => model.Availability)
+                                <div class="onoffswitch align-content-center justify-content-center">
+                                    @{ var type = string.Empty; if (Model.Availability) { type = "checked"; } }
+                                    <input type="checkbox" name="Availability" class="onoffswitch2-checkbox @Model.Email" id="@Model.Email" onchange="updateAvailability()" @type>
+                                    <label class="onoffswitch2-label" for="@Model.Email">
+                                        <span class="onoffswitch2-inner"></span>
+                                        <span class="onoffswitch2-switch"></span>
+                                    </label>
+                                </div>
                             </div><!-- col-8 -->
                         </div><!-- form-group -->
                     </div><!-- card-body -->

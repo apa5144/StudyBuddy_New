@@ -1,4 +1,6 @@
 ﻿using StudyBuddy.DAL.Common;
+using StudyBuddy.Models;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Web;
@@ -10,32 +12,12 @@ namespace StudyBuddy.Core
     {
         private static readonly UnitOfWork UnitOfWork = new UnitOfWork();
 
-        public static string GetGuid(this IPrincipal user)
+        public static HeaderViewModel GetHeader(this IPrincipal user)
         {
-            var claim = ((ClaimsIdentity)user.Identity).FindFirst(ClaimTypes.NameIdentifier);
-            return claim == null ? null : claim.Value;
-        }
-        public static string GetFullName(this IPrincipal user)
-        {
-            var claim = ((ClaimsIdentity)user.Identity).FindFirst(ClaimTypes.NameIdentifier);
-            var student = UnitOfWork.Student.GetOne(claim.Value);
-            return claim == null ? null : string.Format("{0} {1}", student.FirstName, student.LastName);
-        }
-        public static string GetEmail(this IPrincipal user)
-        {
-            var claim = ((ClaimsIdentity)user.Identity).FindFirst(ClaimTypes.NameIdentifier);
-            var student = UnitOfWork.Student.GetOne(claim.Value);
-            return claim == null ? null : student.Email;
-        }
-        public static string GetPicture(this IPrincipal user)
-        {
-            var claim = ((ClaimsIdentity)user.Identity).FindFirst(ClaimTypes.NameIdentifier);
-            var student = UnitOfWork.Student.GetOne(claim.Value);
+            var guid = ((ClaimsIdentity)user.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
+            var header = UnitOfWork.Header.GetHeaderByGuid(guid);
 
-            if (student.ProfilePic == "" || student.ProfilePic == null)
-                return "noprofilepicture.jpg";
-            else
-                return student.ProfilePic;
+            return header;
         }
 
         public static HtmlString DisplayForPhone(this HtmlHelper helper, string phone)
@@ -55,6 +37,13 @@ namespace StudyBuddy.Core
             }
             string s = $"<a href='tel:{phone}'>{formatted}</a>";
             return new HtmlString(s);
+        }
+
+        public static List<RosterLastestFiveViewModel> GetLatestFive(int sectionId, int studentId)
+        {
+            var latest = UnitOfWork.Roster.GetLatestFiveBySectionId(sectionId, studentId);
+
+            return latest;
         }
     }
 }

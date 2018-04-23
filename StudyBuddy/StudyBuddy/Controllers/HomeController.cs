@@ -4,7 +4,6 @@ using StudyBuddy.DAL.Common;
 using StudyBuddy.Models;
 using System;
 using System.Security.Claims;
-using System.Collections.Generic;
 
 namespace StudyBuddy.Controllers
 {
@@ -14,9 +13,9 @@ namespace StudyBuddy.Controllers
         [HttpGet]
         public ActionResult ViewSection(int sectionId)
         {
-            var claim = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier);
+            var guid = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            var doesSectionExistForStudent = UnitOfWork.Roster.GetOne(sectionId, claim.Value);
+            var doesSectionExistForStudent = UnitOfWork.Roster.GetOne(sectionId, guid);
 
             if (doesSectionExistForStudent == null)
             {
@@ -26,7 +25,7 @@ namespace StudyBuddy.Controllers
 
             try
             {
-                var model = UnitOfWork.Roster.GetSectionRoster(sectionId, claim.Value);
+                var model = UnitOfWork.Roster.GetSectionRoster(sectionId, guid);
                 var sectionViewModel = UnitOfWork.Roster.GetBySectionId(sectionId);
                 ViewBag.SectionTitle = sectionViewModel.Title;
                 ViewBag.SectionSubject = sectionViewModel.Subject;
@@ -47,9 +46,9 @@ namespace StudyBuddy.Controllers
         {
             try
             {
-                var claim = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier);
+                var guid = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
 
-                int coursesTotal = UnitOfWork.Roster.GetTotalByGuid(claim.Value);
+                int coursesTotal = UnitOfWork.Roster.GetTotalByGuid(guid);
 
                 if (coursesTotal == 0)
                 {
@@ -58,7 +57,7 @@ namespace StudyBuddy.Controllers
                 }
                 else
                 {
-                    var model = UnitOfWork.Roster.GetByGuid(claim.Value);
+                    var model = UnitOfWork.Roster.GetByGuid(guid);
                     return View(model);
                 }
 
@@ -103,12 +102,12 @@ namespace StudyBuddy.Controllers
 
             try
             {
-                var claim = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier);
+                var guid = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
 
                 for (int i = 0; i < courses.Length; i++)
                 {
                     string sectionColors = "#F49917,#6610f2,#343a40,#6f42c1,#1CAF9A,#23BF08,#dc3545,#5B93D3,#e83e8c,#f27510,#0866C6";
-                    var currentSectionColors = UnitOfWork.Roster.GetSectionColorByGuid(claim.Value);
+                    var currentSectionColors = UnitOfWork.Roster.GetSectionColorByGuid(guid);
 
                     var sectionColor = string.Empty;
 
@@ -128,7 +127,7 @@ namespace StudyBuddy.Controllers
 
                     int sectionId = UnitOfWork.Section.GetSectionIdByCourseSubjectAndNumber(subject, number, sections[i]);
 
-                    UnitOfWork.Roster.Create(sectionId, claim.Value, sectionColor);
+                    UnitOfWork.Roster.Create(sectionId, guid, sectionColor);
                 }
 
                 Success("Successfully added courses.");
@@ -144,16 +143,16 @@ namespace StudyBuddy.Controllers
 
         public ActionResult DeleteSection(int sectionId)
         {
-            var claim = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier);
+            var guid = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            var doesSectionExist = UnitOfWork.Roster.GetOne(sectionId, claim.Value);
+            var doesSectionExist = UnitOfWork.Roster.GetOne(sectionId, guid);
 
             if (doesSectionExist == null)
                 return RedirectToAction("Index", "Home");
 
             try
             {
-                UnitOfWork.Roster.Delete(sectionId, claim.Value);
+                UnitOfWork.Roster.Delete(sectionId, guid);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -168,9 +167,9 @@ namespace StudyBuddy.Controllers
         [HttpPost]
         public JsonResult UpdateAvailability(int sectionId)
         {
-            var claim = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier);
+            var guid = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            UnitOfWork.Roster.UpdateSectionAvailabilityByGuid(sectionId, claim.Value);
+            UnitOfWork.Roster.UpdateSectionAvailabilityByGuid(sectionId, guid);
 
             return Json(new { success = true });
         }
@@ -190,20 +189,6 @@ namespace StudyBuddy.Controllers
             var sections = UnitOfWork.Section.GetSectionByCourseSubjectAndNumber(subject, number);
 
             return Json(sections, JsonRequestBehavior.AllowGet);
-        }
-
-        public static List<RosterLastestFiveViewModel> GetLatestFive(int sectionId, int studentId)
-        {
-            var latest = UnitOfWork.Roster.GetLatestFiveBySectionId(sectionId, studentId);
-
-            return latest;
-        }
-
-        public static SectionViewModel GetSectionViewModel(int sectionId)
-        {
-            var section = UnitOfWork.Roster.GetBySectionId(sectionId);
-
-            return section;
         }
     }
 }

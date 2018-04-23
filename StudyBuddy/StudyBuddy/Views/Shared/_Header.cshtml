@@ -1,8 +1,8 @@
 ﻿@{
-    var guid = StudyBuddy.Core.Helpers.GetGuid(User);
-    var name = StudyBuddy.Core.Helpers.GetFullName(User);
-    var email = StudyBuddy.Core.Helpers.GetEmail(User);
-    var profilePicture = StudyBuddy.Core.Helpers.GetPicture(User);
+    var header = StudyBuddy.Core.Helpers.GetHeader(User);
+    var name = header.FirstName + " " + header.LastName;
+    var email = header.Email;
+    var profilePicture = string.IsNullOrWhiteSpace(header.ProfilePic) ? "noprofilepicture.jpg" : header.ProfilePic;
 }
 <div class="sh-logopanel">
     @Html.ActionLink("Study Buddy", "Index", "Home", new { area = "" }, new { @class = "sh-logo-text" })
@@ -71,7 +71,8 @@
                 <span>Security</span>
             </div>
         </a>
-        <a href="@Url.Action("Logout", "Auth")">" class="sh-icon-link">
+        <a href="@Url.Action("Logout", "Auth")">
+            " class="sh-icon-link">
             <div>
                 <i class="icon ion-power"></i>
                 <span>Sign Out</span>
@@ -131,7 +132,7 @@
         <!-- END: DISPLAYED IN MOBILE ONLY -->
     </div><!-- sh-headpanel-left -->
     <div class="sh-headpanel-right">
-        @*<div class="dropdown mg-r-10">
+        <div class="dropdown mg-r-10">
             <a href="" class="dropdown-link dropdown-link-notification">
                 <i class="icon ion-ios-filing-outline tx-24"></i>
             </a>
@@ -190,7 +191,7 @@
                     </div>
                 </div><!-- media-list -->
             </div><!-- dropdown-menu -->
-        </div>*@
+        </div>
         <div class="dropdown dropdown-profile">
             <a href="" data-toggle="dropdown" class="dropdown-link">
                 <img src="~/Content/UserProfilePictures/@profilePicture" class="wd-60 ht-60 rounded-circle" alt="">

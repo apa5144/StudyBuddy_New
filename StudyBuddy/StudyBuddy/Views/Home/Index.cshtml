@@ -18,7 +18,6 @@
     </script>
 }
 
-
 <div class="sh-breadcrumb">
     <nav class="breadcrumb">
         <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">StudyBuddy</a>
@@ -45,18 +44,28 @@
             <div class="col-md-3 mg-t-10">
                 <div class="card">
                     <div class="card-header d-flex align-items-center justify-content-between tx-white" style="background-color: @item.SectionColor">
-                        <h6 class="mg-b-0 tx-14 tx-white">@Html.DisplayFor(m => item.Title) - <a href="" class="tx-white tx-14 hover-white mg-l-10">Available?   <i class="lh-0">@Html.CheckBoxFor(m => item.SectionAvailability, new { @onchange = "updateAvailability(" + item.SectionId + ")" })</i></a></h6>
+                        <h6 class="mg-b-0 tx-14 tx-white">@Html.DisplayFor(m => item.Title)</h6>
+                        <div>
+                            <div class="onoffswitch">
+                                @{ var type = string.Empty; if (item.SectionAvailability) { type = "checked"; } }
+                                <input type="checkbox" name="item.SectionAvailability" class="onoffswitch-checkbox @item.Subject@item.Section" id="@item.Subject@item.Section" onchange="updateAvailability(@item.SectionId)" @type>
+                                <label class="onoffswitch-label" for="@item.Subject@item.Section">
+                                    <span class="onoffswitch-inner"></span>
+                                    <span class="onoffswitch-switch"></span>
+                                </label>
+                            </div>
+                        </div>
                         <div class="card-option tx-24">
-                            <div class="dropdown">                                
-                                <a href="" data-toggle="dropdown" class="tx-white"><i class="icon ion-more lh-0"></i></a>                                
+                            <div class="dropdown">
+                                <a href="" data-toggle="dropdown" class="tx-white"><i class="icon ion-more lh-0"></i></a>
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <a class="dropdown-item" href="@Url.Action("DeleteSection", "Home", new { item.SectionId })"><i class="icon ion-close lh-0"></i>  Delete</a>
                                 </div><!-- dropdown-menu -->
                             </div>
-                        </div><!-- card-option -->
+                        </div>
                     </div>
                     <div class="card-body">
-                        @{ var latestFive = StudyBuddy.Controllers.HomeController.GetLatestFive(item.SectionId, item.StudentId); }
+                        @{ var latestFive = StudyBuddy.Core.Helpers.GetLatestFive(item.SectionId, item.StudentId); }
                         <h5 class="card-body-title">@Html.DisplayFor(m => item.Subject)</h5>
                         <p class="card-subtitle tx-normal mg-b-15">Section: @Html.DisplayFor(m => item.Section)</p>
                         <hr />
@@ -84,7 +93,7 @@
                                         {
                                             <tr>
                                                 <td>@Html.DisplayFor(m => latest.FirstName) @Html.DisplayFor(m => latest.LastName)</td>
-                                                <td>@Html.DisplayFor(m => latest.Email)</td>                                                
+                                                <td>@Html.DisplayFor(m => latest.Email)</td>
                                             </tr>
                                         }
                                     }
@@ -95,10 +104,11 @@
                         <div class="card-footer bg-gray-400 tx-center">
                             <a href="@Url.Action("ViewSection", "Home", new { item.SectionId })">View All</a>
                         </div><!-- card-footer -->
-                        
+
                     </div>
                 </div><!-- card -->
             </div><!-- col -->
+
                             }
     </div>
 </div><!-- sh-pagebody -->
