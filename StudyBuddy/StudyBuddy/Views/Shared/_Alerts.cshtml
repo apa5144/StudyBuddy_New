@@ -15,7 +15,7 @@
                         <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">@alert.Title</h6>
                     </div>
                     <div class="modal-body pd-25">
-                        <p class="mg-b-5">@alert.Message</p>
+                        <p class="mg-b-5">@Html.Raw(alert.Message)</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary pd-x-20" data-dismiss="modal">Close</button>

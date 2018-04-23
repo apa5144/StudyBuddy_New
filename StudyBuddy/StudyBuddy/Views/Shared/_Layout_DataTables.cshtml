@@ -13,6 +13,7 @@
     @{ Html.RenderPartial("_Header"); }
     <div class="sh-mainpanel">
         @RenderBody()
+        <hr />
         <div class="sh-footer">
             <div>Copyright &copy; @DateTime.Now.Year. All Rights Reserved.</div>
             <div class="mg-t-10 mg-md-t-0">Designed by: <a href="http://themepixels.me">ThemePixels</a></div>
@@ -26,6 +27,10 @@
             'use strict';
 
             $('#datatable1').DataTable({
+                rowReorder: true,
+                rowReorder: {
+                    selector: 'td:nth-child(3)'
+                },
                 responsive: true,
                 language: {
                     searchPlaceholder: 'Search...',

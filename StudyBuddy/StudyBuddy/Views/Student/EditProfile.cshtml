@@ -4,7 +4,6 @@
     ViewBag.Title = "Edit Profile";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var guid = StudyBuddy.Core.Helpers.GetGuid(User);
     var profilePicture = StudyBuddy.Core.Helpers.GetPicture(User);
 }
 @section scripts
@@ -13,12 +12,22 @@
         $(function () {
             $('#toggle-one').bootstrapToggle();
         })
+
+        function removeProfilePicture() {
+            $.ajax({
+                url: '/Student/RemoveProfilePicture',
+                type: "POST",
+                dataType: "JSON"                
+            })
+            window.location.href = '@Url.Action("EditProfile", "Student")';
+        };
     </script>
 }
 
 @using (Html.BeginForm("EditProfile", "Student", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.ProfilePic)
     <div class="sh-breadcrumb">
         <nav class="breadcrumb">
             <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">Study Buddy</a>
@@ -50,10 +59,16 @@
                     </div><!-- card-header -->
                     <div class="card-body tx-center">
                         <img id="img-uploadsrc" src="~/Content/UserProfilePictures/@profilePicture" class="wd-100 ht-100 rounded-circle" alt="">
+                        @if (profilePicture != "noprofilepicture.jpg")
+                        {
+                            <button type="button" class="btn btn-secondary pd-x-20" onclick="removeProfilePicture()">Remove</button>
+                        }
                         <div class="mg-t-20">
+
                             <label class="custom-file">
                                 @Html.TextBoxFor(model => model.ProfilePic, null, new { type = "file", @class = "search inputLabel form-control" })
                             </label>
+
                         </div>
                     </div><!-- card-body -->
                     <div class="card-body">
@@ -90,8 +105,6 @@
         </div><!-- row -->
         <hr class="mg-y-30">
         <button class="btn btn-success pd-x-20 mg-r-2" type="submit">Save Changes</button>
-        <a class="btn btn-secondary pd-x-20" href="@Url.Action("Deactivate", "Student", new { guid })">Deactivate My Account</a>
         <hr class="mg-t-30">
-
     </div><!-- sh-pagebody -->
 }

@@ -1,16 +1,209 @@
 ﻿using System.Web.Mvc;
 using StudyBuddy.Core;
 using StudyBuddy.DAL.Common;
+using StudyBuddy.Models;
+using System;
+using System.Security.Claims;
+using System.Collections.Generic;
 
 namespace StudyBuddy.Controllers
 {
-    [Authorization(Roles = "1,2,3")]
+    [Authorization(Roles = "2,3")]
     public class HomeController : BaseController
     {
+        [HttpGet]
+        public ActionResult ViewSection(int sectionId)
+        {
+            var claim = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier);
+
+            var doesSectionExistForStudent = UnitOfWork.Roster.GetOne(sectionId, claim.Value);
+
+            if (doesSectionExistForStudent == null)
+            {
+                Warning("Sorry, you don't have permission to view that section");
+                return RedirectToAction("Index", "Home");
+            }                
+
+            try
+            {
+                var model = UnitOfWork.Roster.GetSectionRoster(sectionId, claim.Value);
+                var sectionViewModel = UnitOfWork.Roster.GetBySectionId(sectionId);
+                ViewBag.SectionTitle = sectionViewModel.Title;
+                ViewBag.SectionSubject = sectionViewModel.Subject;
+                ViewBag.Section = sectionViewModel.Section;
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                Logger.Fatal(ex.Message);
+                Danger("An error has occurred while getting section roster.");
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        [HttpGet]
         public ActionResult Index()
         {
-            var model = UnitOfWork.Student.GetAll();
-            return View(model);
+            try
+            {
+                var claim = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier);
+
+                int coursesTotal = UnitOfWork.Roster.GetTotalByGuid(claim.Value);
+
+                if (coursesTotal == 0)
+                {
+                    Warning("Looks like you haven't added any courses, yet. Please do so now.");
+                    return RedirectToAction("Add", "Home");
+                }
+                else
+                {
+                    var model = UnitOfWork.Roster.GetByGuid(claim.Value);
+                    return View(model);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Fatal(ex.Message);
+                Danger("Error grabing information.");
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        [HttpGet]
+        public ActionResult Add()
+        {
+            try
+            {
+                var model = new AddCourseViewModel();
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                Logger.Fatal(ex.Message);
+                Danger("An error has occurred.");
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Add(string[] courses, string[] sections)
+        {
+            if (string.IsNullOrWhiteSpace(courses[0]))
+            {
+                ModelState.AddModelError("Courses", "Course is required and cannot be empty.");
+                return View();
+            }
+            if (string.IsNullOrWhiteSpace(sections[0]))
+            {
+                ModelState.AddModelError("Sections", "Section is required and cannot be empty.");
+                return View();
+            }
+
+            try
+            {
+                var claim = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier);
+
+                for (int i = 0; i < courses.Length; i++)
+                {
+                    string sectionColors = "#F49917,#6610f2,#343a40,#6f42c1,#1CAF9A,#23BF08,#dc3545,#5B93D3,#e83e8c,#f27510,#0866C6";
+                    var currentSectionColors = UnitOfWork.Roster.GetSectionColorByGuid(claim.Value);
+
+                    var sectionColor = string.Empty;
+
+                    if (currentSectionColors == null)
+                        sectionColor = sectionColors.Split(',')[0];
+                    else
+                    {
+                        foreach (var item in currentSectionColors)
+                        {
+                            sectionColors = sectionColors.Replace(item+',', "");
+                        }
+                        sectionColor = sectionColors.Split(',')[0];
+                    }
+
+                    var subject = courses[i].Split(' ')[0];
+                    var number = courses[i].Split(' ')[1];
+
+                    int sectionId = UnitOfWork.Section.GetSectionIdByCourseSubjectAndNumber(subject, number, sections[i]);
+
+                    UnitOfWork.Roster.Create(sectionId, claim.Value, sectionColor);
+                }
+
+                Success("Successfully added courses.");
+                return RedirectToAction("Index", "Home");
+            }
+            catch (Exception ex)
+            {
+                Logger.Fatal(ex.Message);
+                Danger("An error has occurred while adding courses.");
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        public ActionResult DeleteSection(int sectionId)
+        {
+            var claim = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier);
+
+            var doesSectionExist = UnitOfWork.Roster.GetOne(sectionId, claim.Value);
+
+            if (doesSectionExist == null)
+                return RedirectToAction("Index", "Home");
+
+            try
+            {
+                UnitOfWork.Roster.Delete(sectionId, claim.Value);
+
+                return RedirectToAction("Index", "Home");
+            }
+            catch(Exception ex)
+            {
+                Logger.Fatal(ex.Message);
+                Danger("An error has occurred while removing course.");
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        [HttpPost]
+        public JsonResult UpdateAvailability(int sectionId)
+        {
+            var claim = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier);
+
+            UnitOfWork.Roster.UpdateSectionAvailabilityByGuid(sectionId, claim.Value);
+
+            return Json(new { success = true });
+        }
+
+        public JsonResult GetCourseByCriteria(string criteria)
+        {
+            var model = UnitOfWork.Course.GetByCriteria(criteria);
+
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult FillSection(string section)
+        {
+            var subject = section.Split(' ')[0];
+            var number = section.Split(' ')[1];
+
+            var sections = UnitOfWork.Section.GetSectionByCourseSubjectAndNumber(subject, number);
+
+            return Json(sections, JsonRequestBehavior.AllowGet);
+        }
+
+        public static List<RosterLastestFiveViewModel> GetLatestFive(int sectionId, int studentId)
+        {
+            var latest = UnitOfWork.Roster.GetLatestFiveBySectionId(sectionId, studentId);
+
+            return latest;
+        }
+
+        public static SectionViewModel GetSectionViewModel(int sectionId)
+        {
+            var section = UnitOfWork.Roster.GetBySectionId(sectionId);
+
+            return section;
         }
     }
 }

@@ -15,7 +15,6 @@ namespace StudyBuddy.Controllers
     {
         public Mail _mail = new Mail();
 
-        // GET: Auth/Signup
         [HttpGet]
         public ActionResult Signup()
         {
@@ -77,12 +76,16 @@ namespace StudyBuddy.Controllers
 
         public ActionResult Verify(string guid)
         {
+            if (string.IsNullOrWhiteSpace(guid))
+                return RedirectToAction("Error", "Auth");
             try
             {
                 var student = new Student();
-                student = UnitOfWork.Student.GetByGuid(guid);
 
                 UnitOfWork.Student.VerifyByGuid(guid);
+
+                student = UnitOfWork.Student.GetByGuid(guid);
+
                 IdentitySignin(student);
 
                 Success("Your account has been successfully verified.");
@@ -96,7 +99,6 @@ namespace StudyBuddy.Controllers
             }
         }
 
-        // GET: Auth/ForgotPassword
         [HttpGet]
         public ActionResult ForgotPassword()
         {
@@ -135,20 +137,20 @@ namespace StudyBuddy.Controllers
             }
         }
 
-        // GET: Auth/ResetPassword
         [HttpGet]
         public ActionResult ResetPassword(string guid)
         {
+            if (string.IsNullOrWhiteSpace(guid))
+                return RedirectToAction("Error", "Auth");
             try
             {
-                if (guid == null)
-                {
-                    Danger("Incorrect attempt.");
-                    return RedirectToAction("Login", "Auth");
-                }
-
                 var student = new Student();
                 student = UnitOfWork.Student.GetByGuid(guid);
+
+                if (student == null)
+                {
+                    Danger("This account does not exist.");
+                }
 
                 return View(student);
             }
@@ -188,7 +190,6 @@ namespace StudyBuddy.Controllers
             }
         }
 
-        // GET: Auth/Login
         [HttpGet]
         public ActionResult Login(string returnUrl)
         {
@@ -197,7 +198,6 @@ namespace StudyBuddy.Controllers
             return View(model);
         }
 
-        // GET: Auth/Logout
         public ActionResult Logout()
         {
             var ctx = Request.GetOwinContext();
@@ -227,7 +227,7 @@ namespace StudyBuddy.Controllers
                 {
                     if (student.SecurityLevel == 0)
                     {
-                        Danger("This account has been disabled, please contact the system administrator(s) to re-activate your account.");
+                        Danger("This account has been disabled.<p><a href='" + _mail.GetBaseUrl() + "Auth/Activate?guid=" + student.Guid + "'>Click here to request reactivation</a></p>", true);
                         return View();
                     }
                     else if (student.Password != Cryption.Encrypt(model.Password))
@@ -263,10 +263,7 @@ namespace StudyBuddy.Controllers
 
             // create required claims
             claims.Add(new Claim(ClaimTypes.NameIdentifier, student.Guid.ToString()));
-            claims.Add(new Claim(ClaimTypes.Name, string.Format("{0} {1}", student.FirstName, student.LastName)));
-            claims.Add(new Claim(ClaimTypes.Email, student.Email));
             claims.Add(new Claim(ClaimTypes.Role, student.SecurityLevel.ToString()));
-            claims.Add(new Claim(ClaimTypes.UserData, student.ProfilePic));
 
             var identity = new ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie);
 
@@ -305,8 +302,37 @@ namespace StudyBuddy.Controllers
 
             return RedirectToAction("New", "Snippet", null);
         }
+
+        public ActionResult Activate(string guid)
+        {
+            if (string.IsNullOrWhiteSpace(guid))
+                return RedirectToAction("Error", "Auth");
+
+            try
+            {
+                var student = UnitOfWork.Student.GetByGuid(guid);
+
+                UnitOfWork.Student.VerifyByGuid(guid);
+
+                _mail.SendVerificationMail("do-not-reply@studybuddy.com", student.Email, "Reactivation Request", guid, student.FirstName);
+
+                Information("An email with instructions to activating your account has been sent to your email.");
+                return RedirectToAction("Login", "Auth");
+            }
+            catch (Exception ex)
+            {
+                Logger.Fatal(ex.Message);
+                Danger("An error occured while trying to reactivate account.");
+                return RedirectToAction("Login", "Auth");
+            }
+        }
+
+
         public ActionResult Reactivate(string guid)
         {
+            if (string.IsNullOrWhiteSpace(guid))
+                return RedirectToAction("Error", "Auth");
+
             try
             {
                 var student = UnitOfWork.Student.GetByGuid(guid);
@@ -324,6 +350,11 @@ namespace StudyBuddy.Controllers
                 Danger("An error occured while trying to reactivate email.");
                 return RedirectToAction("Login", "Auth");
             }
+        }
+
+        public ActionResult Error()
+        {
+            return View();
         }
     }
 }

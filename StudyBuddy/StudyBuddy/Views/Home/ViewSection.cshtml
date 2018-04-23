@@ -1,0 +1,63 @@
+﻿@model  List<StudyBuddy.Models.ViewRosterViewModel>
+
+@{
+    ViewBag.Title = "Section Roster";
+    Layout = "~/Views/Shared/_Layout_DataTables.cshtml";
+}
+
+<div class="sh-breadcrumb">
+    <nav class="breadcrumb">
+        <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">StudyBuddy</a>
+        <span class="breadcrumb-item active">Section Roster</span>
+    </nav>
+</div><!-- sh-breadcrumb -->
+<div class="sh-pagetitle">
+    <div class="input-group">
+    </div><!-- input-group -->
+    <div class="sh-pagetitle-left">
+        <div class="sh-pagetitle-icon"><i class="icon ion-clipboard"></i></div>
+        <div class="sh-pagetitle-title">
+            <span>List of all students in @ViewBag.SectionSubject  @ViewBag.Section - @ViewBag.SectionTitle</span>
+            <h2>@ViewBag.Title</h2>
+        </div><!-- sh-pagetitle-left-title -->
+    </div><!-- sh-pagetitle-left -->
+</div><!-- sh-pagetitle -->
+
+<div class="sh-pagebody">
+    <div class="card bd-primary mg-t-20">
+        <div class="card-header bg-primary tx-white">@ViewBag.SectionSubject  @ViewBag.Section - @ViewBag.SectionTitle Roster</div>
+        <div class="card-body pd-sm-30">
+            @if (!Model.Any())
+            {
+                <p class="mg-b-20 mg-sm-b-30">Bummer, Looks like there are currently no students available for studying. (∩︵∩)</p>
+            }
+            else
+            {
+                <p class="mg-b-20 mg-sm-b-30">Good news, looks like there are more fellow students looking for a study buddy as well!</p>
+                <p>Please use the provided information to reach them.</p>
+            }
+            <div class="table-wrapper">
+                <table id="datatable1" class="table display responsive nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th class="wd-15p">Name</th>
+                            <th class="wd-15p">Email</th>
+                            <th class="wd-15p">Phone Number</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            var stringPhone = item.PhoneNumber.ToString();
+                            <tr>
+                                <td>@Html.DisplayFor(m => item.FirstName) @Html.DisplayFor(m => item.LastName)</td>
+                                <td>@Html.DisplayFor(m => item.Email)</td>
+                                <td>@Html.DisplayForPhone(stringPhone)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div><!-- table-wrapper -->
+        </div><!-- card-body -->
+    </div><!-- card -->
+</div><!-- sh-pagebody -->
