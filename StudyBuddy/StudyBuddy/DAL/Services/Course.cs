@@ -10,12 +10,6 @@ namespace StudyBuddy.DAL.Services
         [SprocName("Course_GetAll")]
         public abstract List<Course> GetAll();
 
-        [SprocName("Course_GetListOfCourses")]
-        public abstract List<AddCourseViewModel> GetListOfCourses();
-
-        [SprocName("Course_GetByCriteria")]
-        public abstract List<AddCourseViewModel> GetByCriteria(string criteria);
-
         [SprocName("Course_GetOne")]
         public abstract Course GetOne(int id);
 

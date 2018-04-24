@@ -4,35 +4,21 @@
     ViewBag.Title = "Edit Profile";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var header = StudyBuddy.Core.Helpers.GetHeader(User);
-    var profilePicture = string.IsNullOrWhiteSpace(header.ProfilePic) ? "noprofilepicture.jpg" : header.ProfilePic;
+    var guid = StudyBuddy.Core.Helpers.GetGuid(User);
+    var profilePicture = StudyBuddy.Core.Helpers.GetPicture(User);
 }
-@section Scripts {
+@section scripts
+{
     <script>
-        function removeProfilePicture() {
-            $.ajax({
-                url: '/Student/RemoveProfilePicture',
-                type: "POST",
-                dataType: "JSON"                
-            })
-            window.location.href = '@Url.Action("EditProfile", "Student")';
-        };
-
-        function updateAvailability() {
-            $.ajax({
-                url: '/Student/UpdateAvailability',
-                type: "POST",
-                dataType: "JSON"
-            })
-        };
+        $(function () {
+            $('#toggle-one').bootstrapToggle();
+        })
     </script>
 }
 
 @using (Html.BeginForm("EditProfile", "Student", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    @Html.HiddenFor(model => model.ProfilePic)
-    @Html.HiddenFor(model => model.Availability)
     <div class="sh-breadcrumb">
         <nav class="breadcrumb">
             <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">Study Buddy</a>
@@ -64,16 +50,10 @@
                     </div><!-- card-header -->
                     <div class="card-body tx-center">
                         <img id="img-uploadsrc" src="~/Content/UserProfilePictures/@profilePicture" class="wd-100 ht-100 rounded-circle" alt="">
-                        @if (profilePicture != "noprofilepicture.jpg")
-                        {
-                            <button type="button" class="btn btn-secondary pd-x-20" onclick="removeProfilePicture()">Remove</button>
-                        }
                         <div class="mg-t-20">
-
                             <label class="custom-file">
                                 @Html.TextBoxFor(model => model.ProfilePic, null, new { type = "file", @class = "search inputLabel form-control" })
                             </label>
-
                         </div>
                     </div><!-- card-body -->
                     <div class="card-body">
@@ -98,17 +78,10 @@
                                 @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
                             </div><!-- col-8 -->
                         </div><!-- form-group -->
-                        <div class="form-group row align-items-center">                            
+                        <div class="form-group row align-items-center">
                             <label class="mg-b-0 col-4 tx-right">@Html.LabelFor(model => model.Availability):</label>
                             <div class="col-6">
-                                <div class="onoffswitch align-content-center justify-content-center">
-                                    @{ var type = string.Empty; if (Model.Availability) { type = "checked"; } }
-                                    <input type="checkbox" name="Availability" class="onoffswitch2-checkbox @Model.Email" id="@Model.Email" onchange="updateAvailability()" @type>
-                                    <label class="onoffswitch2-label" for="@Model.Email">
-                                        <span class="onoffswitch2-inner"></span>
-                                        <span class="onoffswitch2-switch"></span>
-                                    </label>
-                                </div>
+                                @Html.CheckBoxFor(model => model.Availability)
                             </div><!-- col-8 -->
                         </div><!-- form-group -->
                     </div><!-- card-body -->
@@ -117,6 +90,8 @@
         </div><!-- row -->
         <hr class="mg-y-30">
         <button class="btn btn-success pd-x-20 mg-r-2" type="submit">Save Changes</button>
+        <a class="btn btn-secondary pd-x-20" href="@Url.Action("Deactivate", "Student", new { guid })">Deactivate My Account</a>
         <hr class="mg-t-30">
+
     </div><!-- sh-pagebody -->
 }

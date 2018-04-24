@@ -3,6 +3,7 @@ using StudyBuddy.Models;
 using System;
 using System.IO;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Helpers;
@@ -15,14 +16,9 @@ namespace StudyBuddy.Controllers
     {
         public Mail _mail = new Mail();
 
-        [HttpGet]
-        public ActionResult EditProfile()
+        // GET: Student/EditProfile
+        public ActionResult EditProfile(string guid)
         {
-            var guid = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
-
-            if (string.IsNullOrWhiteSpace(guid))
-                return RedirectToAction("Error", "Auth");
-
             try
             {
                 var model = UnitOfWork.Student.GetOne(guid);
@@ -40,8 +36,6 @@ namespace StudyBuddy.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditProfile(Student model)
         {
-            var guid = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
-
             try
             {
                 if (Request.Files.Count > 0)
@@ -68,7 +62,7 @@ namespace StudyBuddy.Controllers
                                 else
                                 {
                                     img.Save(Path.Combine(Server.MapPath("~/Content/UserProfilePictures/"), fileName));
-                                }
+                                }                                
                             }
                             else
                             {
@@ -79,13 +73,8 @@ namespace StudyBuddy.Controllers
                         model.ProfilePic = fileName;
                     }
                 }
-                if(string.IsNullOrWhiteSpace(model.ProfilePic))
-                {
-                    var student = UnitOfWork.Student.GetOne(guid);
-                    model.ProfilePic = student.ProfilePic;
-                }
 
-                UnitOfWork.Student.Update(guid, model.FirstName, model.LastName, model.PhoneNumber, model.ProfilePic);
+                UnitOfWork.Student.Update(model.Id, model.FirstName, model.LastName, model.PhoneNumber, model.Availability, model.ProfilePic);
                 Success("Information successfully changed.");
                 return View(model);
             }
@@ -93,177 +82,126 @@ namespace StudyBuddy.Controllers
             {
                 Logger.Fatal(ex.Message);
                 Danger("Error updating information.");
-                return RedirectToAction("EditProfile", "Student");
+                return RedirectToAction("EditProfile", "Student", model.Id);
             }
         }
 
-        [HttpGet]
-        public ActionResult Security()
+        // GET: Student/EditProfile
+        public ActionResult EditLoginInformation(string guid)
         {
-            var guid = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
-
-            if (string.IsNullOrWhiteSpace(guid))
-                return RedirectToAction("Error", "Auth");
-
             try
             {
-                var model = UnitOfWork.Student.GetSecurityInformationByGuid(guid);
-
+                var model = UnitOfWork.Student.GetOne(guid);
+                model.Password = null;
+                model.ConfirmPassword = null;
                 return View(model);
             }
             catch (Exception ex)
             {
                 Logger.Fatal(ex.Message);
-                Danger("Error getting security information.");
+                Danger("Error grabing information.");
                 return RedirectToAction("Index", "Home");
             }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Security(SecurityViewModel model)
+        public ActionResult EditLoginInformation(Student model)
         {
-            if (!ModelState.IsValid)
-                return View(model);
-
-            if (model.ChangeEmail)
-            {
-                if (string.IsNullOrWhiteSpace(model.OldEmail) || string.IsNullOrWhiteSpace(model.NewEmail) || string.IsNullOrWhiteSpace(model.ConfirmEmail))
-                {
-                    Danger("Email fields are required and cannot be empty.");
-                    return View(model);
-                }
-            }
-
-            if (model.ChangePassword)
-            {
-                if (string.IsNullOrWhiteSpace(model.OldPassword) || string.IsNullOrWhiteSpace(model.NewPassword) || string.IsNullOrWhiteSpace(model.ConfirmPassword))
-                {
-                    Danger("Password fields are required and cannot be empty.");
-                    return View(model);
-                }
-
-                if (model.NewPassword.Length < 6 || model.NewPassword.Length > 50)
-                {
-                    Danger("Password length must be at least 6 characters and no more than 50.");
-                    return View(model);
-                }
-            }
-
-            var guid = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
-
             try
             {
-                if (model.ChangeEmail)
-                {
-                    if (model.NewEmail == model.Email)
-                    {
-                        ModelState.AddModelError("NewEmail", "Sorry, you cannot use your current Email.");
-                        return View(model);
-                    }
-                    else
-                    {
-                        var student = UnitOfWork.Student.GetOne(guid);
-                        UnitOfWork.Student.UpdateEmailByGuid(guid, model.NewEmail);                        
-
-                        _mail.SendEmailChangeVerificationMail("do-not-reply@studybuddy.com", model.NewEmail, "Email Change Verification", guid, student.FirstName);
-                    }
-                }
-
-                if (model.ChangePassword)
-                {
-                    if (Cryption.Encrypt(model.NewPassword) == model.Password)
-                    {
-                        ModelState.AddModelError("NewPassword", "Sorry, you cannot use your current Password.");
-                        return View(model);
-                    }
-                    else
-                        UnitOfWork.Student.UpdatePasswordByGuid(guid, Cryption.Encrypt(model.NewPassword));
-                }
-
-                var ctx = Request.GetOwinContext();
-                var authManager = ctx.Authentication;
-                authManager.SignOut("ApplicationCookie");
-
-                Success("Your security information were successfuly changed.\n\nPlease check your email if you have changed it, otherwise, We ask you to please relog with your new information to confirm your changes.");
-                return RedirectToAction("Login", "Auth");
+                return View();
             }
             catch (Exception ex)
             {
                 Logger.Fatal(ex.Message);
                 Danger("Error changing login information");
-                return RedirectToAction("Security", "Student");
+                return RedirectToAction("EditLoginInformation", "Student", model);
             }
         }
 
-        public ActionResult SendReactivation()
+        public ActionResult Deactivate(string guid)
         {
-            var guid = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
+                try
+                {
+                    //var student = new Student();
+                    var student = UnitOfWork.Student.GetByGuid(guid);
 
-            try
-            {
-                var student = UnitOfWork.Student.GetOne(guid);
+                    UnitOfWork.Student.Deactivate(guid);
 
-                _mail.SendVerificationMail("do-not-reply@studybuddy.com", student.Email, "Email confirmation", guid, student.FirstName);
+                    var ctx = Request.GetOwinContext();
+                    var authManager = ctx.Authentication;
 
-                Success("Your account has been successfully verified.");
-                return RedirectToAction("Index", "Home");
+                    authManager.SignOut("ApplicationCookie");
+                    Information("Your account has been successfully deactivated.");
+                    _mail.SendDeactivationMail("do-not-reply@studybuddy.com", student.Email, "Deactivation Notice", guid, student.FirstName);
+                return RedirectToAction("Login", "Auth");
+                    
+
+
             }
-            catch (Exception ex)
-            {
-                Logger.Fatal(ex.Message);
-                Danger("Error with sending reactivation email");
-                return RedirectToAction("Index", "Home");
-            }
+                catch (Exception ex)
+                {
+                    Logger.Fatal(ex.Message);
+                    Danger("An error occured while trying to deactivate email.");
+                    return RedirectToAction("Login", "Auth");
+                }
+
         }
 
-        public ActionResult Deactivate()
+        public ActionResult Reactivate(string guid)
         {
-            var guid = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
-
-            if (string.IsNullOrWhiteSpace(guid))
-                return RedirectToAction("Error", "Auth");
-
             try
             {
                 var student = UnitOfWork.Student.GetByGuid(guid);
 
-                UnitOfWork.Student.Deactivate(guid);
+                UnitOfWork.Student.Reactivate(guid);
 
                 var ctx = Request.GetOwinContext();
                 var authManager = ctx.Authentication;
-                authManager.SignOut("ApplicationCookie");
 
-                Information("Your account has been successfully deactivated.");
-                _mail.SendDeactivationMail("do-not-reply@studybuddy.com", student.Email, "Deactivation Notice", guid, student.FirstName);
+                authManager.SignOut("ApplicationCookie");
+                Information("Your account has been successfully reactivated.");
+                _mail.SendReactivationMail("do-not-reply@studybuddy.com", student.Email, "Reactivation Notice", guid, student.FirstName);
                 return RedirectToAction("Login", "Auth");
+
             }
             catch (Exception ex)
             {
                 Logger.Fatal(ex.Message);
-                Danger("An error occured while trying to deactivate email.");
+                Danger("An error occured while trying to reactivate email.");
                 return RedirectToAction("Login", "Auth");
             }
         }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult ChangeEmail(int id, string newEmail)
+        //{
+        //    try
+        //    {
+        //        var doesEmailExist = UnitOfWork.Student.DoesEmailExist(newEmail);
 
-        [HttpPost]
-        public JsonResult RemoveProfilePicture()
-        {
-            var guid = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
+        //        if (doesEmailExist)
+        //        {
+        //            Danger(string.Format("Email [{0}] already exists. Please try a different one.", newEmail));
+        //            return RedirectToAction("EditProfile", "Student", id);
+        //        }
 
-            UnitOfWork.Student.RemoveProfilePictureByGuid(guid);
+        //        var model = UnitOfWork.Student.GetOne(id);
 
-            return Json(new { success = false, JsonRequestBehavior.AllowGet });
-        }
+        //        UnitOfWork.Student.UpdateEmailById(id, newEmail);
 
-        [HttpPost]
-        public JsonResult UpdateAvailability()
-        {
-            var guid = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
+        //        _mail.SendVerificationMail("do-not-reply@studybuddy.com", newEmail, "Account confirmation", model.Guid.ToString(), model.FirstName);
+        //        Success(string.Format("Account [{0}] has been successfully created.\nPlease check your email for the confirmation link.", model.Email));
 
-            UnitOfWork.Student.UpdateAvailabilityByGuid(guid);
-
-            return Json(new { success = true });
-        }
+        //        return RedirectToAction("EditProfile", "Student", id);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.Fatal(ex.Message);
+        //        Danger("Error changing email.");
+        //        return RedirectToAction("EditProfile", "Student", id);
+        //    }
+        //}
     }
 }

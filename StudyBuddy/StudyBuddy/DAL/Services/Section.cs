@@ -21,11 +21,5 @@ namespace StudyBuddy.DAL.Services
 
         [SprocName("Section_Update")]
         public abstract Section Update(int id, string section, string instructor);
-
-        [SprocName("Section_GetSectionByCourseSubjectAndNumber")]
-        public abstract List<string> GetSectionByCourseSubjectAndNumber(string subject, string number);
-
-        [SprocName("Section_GetSectionIdByCourseSubjectAndNumberAndSection")]
-        public abstract int GetSectionIdByCourseSubjectAndNumber(string subject, string number, string section);
     }
 }

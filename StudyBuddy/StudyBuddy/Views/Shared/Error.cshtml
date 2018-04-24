@@ -1,9 +1,8 @@
-﻿@{ 
-    Layout = null;
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+    @{ Html.RenderPartial("_Meta"); }
+
     <link href="~/Content/Shamcey/css/shamcey.css" rel="stylesheet" />
 </head>
 
@@ -16,6 +15,13 @@
                 The page you are looking for might have been removed, had its name changed,
                 or unavailable. Maybe you could try a search:
             </p>
+
+            <div class="d-flex justify-content-center">
+                <div class="d-flex wd-xs-300">
+                    <input type="text" class="form-control ht-40" placeholder="Search...">
+                    <button class="btn btn-success bd-0 mg-l-5 ht-40 pd-x-20">Search</button>
+                </div>
+            </div><!-- d-flex -->
         </div>
     </div><!-- ht-100v -->
 </body>

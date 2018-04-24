@@ -7,10 +7,6 @@ namespace StudyBuddy.DAL.Interfaces
     {
         List<Course> GetAll();
 
-        List<AddCourseViewModel> GetListOfCourses();
-
-        List<AddCourseViewModel> GetByCriteria(string criteria);
-
         Course GetOne(int id);
 
         Course Create(string subject ,string number, string title);

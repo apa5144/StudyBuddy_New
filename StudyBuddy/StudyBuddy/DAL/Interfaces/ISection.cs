@@ -14,9 +14,5 @@ namespace StudyBuddy.DAL.Interfaces
         void Delete(int id);
 
         Section Update(int id ,string section, string instructor);
-
-        List<string> GetSectionByCourseSubjectAndNumber(string subject, string number);
-
-        int GetSectionIdByCourseSubjectAndNumber(string subject, string number, string section);
     }
 }

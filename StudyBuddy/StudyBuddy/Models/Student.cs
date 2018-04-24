@@ -42,7 +42,7 @@ namespace StudyBuddy.Models
         [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "Passwords don't match. Please fix and try again.")]
         public string ConfirmPassword { get; set; }
 
-        [DisplayName("Status")]
+        [DisplayName("Available?")]
         public bool Availability { get; set; }
 
         public string ProfilePic { get; set;}

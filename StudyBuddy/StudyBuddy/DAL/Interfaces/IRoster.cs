@@ -7,26 +7,12 @@ namespace StudyBuddy.DAL.Interfaces
     {
         List<Roster> GetAll();
 
-        Roster GetOne(int sectionId, string guid);
+        Roster GetOne(int section_Id);
 
-        Roster Create(int sectionId, string studentGuid, string sectionColor);
+        Roster Create( bool groupAvailabiltiy, string comment);
 
-        void Delete(int sectionId, string guid);
+        void Delete(int section_Id);
 
-        Roster Update(int sectionId, bool groupAvailability, string comment);
-
-        List<RosterViewModel> GetByGuid(string guid);
-
-        int GetTotalByGuid(string guid);
-
-        List<RosterLastestFiveViewModel> GetLatestFiveBySectionId(int sectionId, int studentId);
-
-        void UpdateSectionAvailabilityByGuid(int sectionId, string guid);
-
-        List<ViewRosterViewModel> GetSectionRoster(int sectionId, string guid);
-
-        SectionViewModel GetBySectionId(int sectionId);
-
-        List<string> GetSectionColorByGuid(string guid);
+        Roster Update(int section_Id, bool groupAvailability, string comment);
     }
 }

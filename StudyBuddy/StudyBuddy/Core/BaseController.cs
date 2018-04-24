@@ -6,9 +6,10 @@ namespace StudyBuddy.Core
 {
     public class BaseController : Controller
     {
-        private static UnitOfWork _unitOfWork;
+        private UnitOfWork _unitOfWork;
 
-        public static UnitOfWork UnitOfWork { get { return _unitOfWork ?? (_unitOfWork = new UnitOfWork()); } }
+        public UnitOfWork UnitOfWork { get { return _unitOfWork ?? (_unitOfWork = new UnitOfWork()); } }
+
         public static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public void Success(string message, bool dismissable = false)

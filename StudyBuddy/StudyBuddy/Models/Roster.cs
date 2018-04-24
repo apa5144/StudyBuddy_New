@@ -2,9 +2,9 @@
 {
     public class Roster
     {
-        public int SectionId { get; set; }
+        public int Section_Id { get; set; }
 
-        public int StudentId { get; set; }
+        public int Student_Id { get; set; }
 
         public bool GroupAvailabiltiy { get; set; }
 
@@ -12,8 +12,8 @@
 
         public Roster()
         {
-            SectionId = default(int);
-            StudentId = default(int);
+            Section_Id = default(int);
+            Student_Id = default(int);
             Comment = string.Empty;
             GroupAvailabiltiy = default(bool);
         }
