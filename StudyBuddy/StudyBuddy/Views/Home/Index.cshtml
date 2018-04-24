@@ -16,13 +16,13 @@
             })
         };
 
-        function sendPoke(Email, Text) {
+        function sendPoke(Email, text) {
             $.ajax({
                 url: '@Url.Action("Poke", "Home")',
                 type: "POST",
                 dataType: "JSON",
                 data: { email: Email },
-                success: alert(Text)
+                success: $(text).replaceWith("<div>Poke sent!</div>")
             });
         };
     </script>
@@ -76,7 +76,7 @@
                     <div class="card-body">
                         @{ var latestFive = StudyBuddy.Core.Helpers.GetLatestFive(item.SectionId, item.StudentId); }
                         <h5 class="card-body-title">@Html.DisplayFor(m => item.Subject)</h5>
-                        <p class="card-subtitle tx-normal mg-b-15">Section: @Html.DisplayFor(m => item.Section)</p>
+                        <p class="card-subtitle tx-normal mg-b-15">Section: @Html.DisplayFor(m => item.Section) @Html.DisplayFor(m => item.SectionId)</p>
 
                         <p class="card-text">Latest 5 students available to study:</p>
                         <div class="table-responsive">
@@ -102,6 +102,7 @@
                                         foreach (var latest in latestFive)
                                         {
                                             var formattedEmail = "'" + latest.Email + "'";
+                                            var formattedText = "#" + item.Title;
                                             <tr>
                                                 <td>@Html.DisplayFor(m => latest.FirstName) @Html.DisplayFor(m => latest.LastName)</td>
                                                 <td>@Html.DisplayFor(m => latest.Email)</td>

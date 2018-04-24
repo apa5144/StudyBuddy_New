@@ -181,7 +181,7 @@
                             var read = string.Empty; if (!StudyBuddy.Core.Helpers.IsSpecificNotificationRead(User, item.Id)) { read = "bg-gray-300"; }
                         <a onclick='markAsRead(this, @item.Id)' href="@Url.Action("Index", "Notification")" class="media-list-link @read" id="notification_@item.Id">
                             <div class="media pd-x-20 pd-y-15">
-                                <img src="~/Content/UserProfilePictures/@notificationPicture" class="wd-40 rounded-circle" alt="">
+                                <img src="~/Content/UserProfilePictures/@notificationPicture" class="wd-hi-40 rounded-circle" alt="">
                                 <div class="media-body">
                                     @{ var body = item.Body; if (body.Length > 100) { body = body.Substring(0, 100); body = body + "..."; } }
                                     <p class="tx-13 mg-b-0">@Html.Raw(body)</p>
@@ -199,11 +199,11 @@
         </div>
         <div class="dropdown dropdown-profile">
             <a href="" data-toggle="dropdown" class="dropdown-link">
-                <img src="~/Content/UserProfilePictures/@profilePicture" class="wd-60 ht-60 rounded-circle" alt="">
+                <img src="~/Content/UserProfilePictures/@profilePicture" class="wd-hi-60 rounded-circle" alt="">
             </a>
             <div class="dropdown-menu dropdown-menu-right">
                 <div class="media align-items-center">
-                    <img src="~/Content/UserProfilePictures/@profilePicture" class="wd-60 ht-60 rounded-circle bd pd-5" alt="">
+                    <img src="~/Content/UserProfilePictures/@profilePicture" class="wd-hi-60 rounded-circle bd pd-5" alt="">
                     <div class="media-body">
                         <h6 class="tx-inverse tx-15 mg-b-5">@name</h6>
                         <p class="mg-b-0 tx-12">@email</p>
