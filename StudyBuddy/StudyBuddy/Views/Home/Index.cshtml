@@ -16,14 +16,14 @@
             })
         };
 
-        function sendPoke(Email, text) {
+        function sendPoke(Email, Text) {
             $.ajax({
                 url: '@Url.Action("Poke", "Home")',
                 type: "POST",
                 dataType: "JSON",
                 data: { email: Email },
-                success: $(text).replaceWith("<div>Poke sent!</div>")
-                });
+                success: alert(Text)
+            });
         };
     </script>
 }
@@ -77,25 +77,29 @@
                         @{ var latestFive = StudyBuddy.Core.Helpers.GetLatestFive(item.SectionId, item.StudentId); }
                         <h5 class="card-body-title">@Html.DisplayFor(m => item.Subject)</h5>
                         <p class="card-subtitle tx-normal mg-b-15">Section: @Html.DisplayFor(m => item.Section)</p>
-                        <hr />
-                        @if (!latestFive.Any())
-                        {
-                            <p>There are currently no students available for studying. (∩︵∩)</p>
-                        }
-                        else
-                        {
-                            <p class="card-text">Latest 5 students available to study:</p>
-                            <div class="table-responsive">
-                                <table class="table mg-b-0">
-                                    <thead>
+
+                        <p class="card-text">Latest 5 students available to study:</p>
+                        <div class="table-responsive">
+                            <table class="table mg-b-0">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (!latestFive.Any())
+                                    {
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var latest in latestFive)
+                                            <td>There are no students available.</td>
+                                            <td></td>
+                                            <td></td>                                            
+                                        </tr>                                        
+                                    }
+                                    else
+                                    {
+                                        foreach (var latest in latestFive)
                                         {
                                             var formattedEmail = "'" + latest.Email + "'";
                                             <tr>
@@ -117,19 +121,18 @@
                                                 </div><!-- modal-dialog -->
                                             </div><!-- modal -->
                                         }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <hr />
+                        <div class="card-footer bg-gray-400 tx-center">
+                            <a href="@Url.Action("ViewSection", "Home", new { item.SectionId })">View All</a>
+                        </div><!-- card-footer -->
 
-                                    </tbody>
-                                </table>
-                            </div>
-                            <hr />
-                            <div class="card-footer bg-gray-400 tx-center">
-                                <a href="@Url.Action("ViewSection", "Home", new { item.SectionId })">View All</a>
-                            </div><!-- card-footer -->
-                        }
                     </div>
                 </div><!-- card -->
             </div><!-- col -->
-
                             }
     </div>
 </div><!-- sh-pagebody -->
