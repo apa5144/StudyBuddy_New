@@ -14,5 +14,3 @@
 Parameter name: addresses
 2018-04-16 15:19:55.9088 | FATAL | StudyBuddy.Core.BaseController | Value cannot be null.
 Parameter name: addresses
-2018-04-19 22:03:27.0039 | FATAL | StudyBuddy.Core.BaseController | Failed to convert parameter value from a String to a Int64.
-2018-04-19 22:04:06.2345 | FATAL | StudyBuddy.Core.BaseController | Failed to convert parameter value from a String to a Int64.
