@@ -170,12 +170,12 @@ namespace StudyBuddy.Controllers
             if (string.IsNullOrWhiteSpace(email))
                 return Json(new { success = false });
 
-            var student = UnitOfWork.Student.GetByEmail(email);
+            var guid = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var student = UnitOfWork.Student.GetByGuid(guid);
 
             if (student == null)
                 return Json(new { success = false });
-
-            var guid = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
 
             UnitOfWork.Notification.AddNotificationByGuidAndTargetEmail("<strong>" + student.FirstName + "</strong> has poked you. Looks like someone wants to study!", guid, email);
             return Json(new { success = true });
