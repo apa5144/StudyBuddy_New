@@ -1,8 +1,8 @@
 ﻿@{
-    var guid = StudyBuddy.Core.Helpers.GetGuid(User);
-    var name = StudyBuddy.Core.Helpers.GetFullName(User);
-    var email = StudyBuddy.Core.Helpers.GetEmail(User);
-    var profilePicture = StudyBuddy.Core.Helpers.GetPicture(User);
+    var header = StudyBuddy.Core.Helpers.GetHeader(User);
+    var name = header.FirstName + " " + header.LastName;
+    var email = header.Email;
+    var profilePicture = string.IsNullOrWhiteSpace(header.ProfilePic) ? "noprofilepicture.jpg" : header.ProfilePic;
 }
 <div class="sh-logopanel">
     @Html.ActionLink("Study Buddy", "Index", "Home", new { area = "" }, new { @class = "sh-logo-text" })
@@ -14,40 +14,68 @@
     <ul class="nav">
         <li class="nav-item">
             <a href="@Url.Action("Index", "Home")" class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "active" : "")">
-                <i class="icon ion-ios-home-outline"></i>
-                <span>Student</span>
+                <i class="icon ion-grid"></i>
+                <span>My Courses</span>
             </a>
         </li><!-- nav-item -->
         <li class="nav-item">
-            <a href="@Url.Action("Index", "Home")" class="nav-link with-sub">
-                <i class="icon ion-ios-bookmarks-outline"></i>
-                <span>Placeholder page</span>
+            <a href="@Url.Action("Add", "Home")" class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Add" ? "active" : "")">
+                <i class="icon ion-plus"></i>
+                <span>Add Courses</span>
             </a>
-            <ul class="nav-sub">
-                <li class="nav-item"><a href="@Url.Action("Index", "Home")" class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "" ? "active" : "")">Sub Page</a></li>
-            </ul>
+        </li><!-- nav-item -->
+        <li class="nav-item">
+            <a href="@Url.Action("EditProfile", "Student")" class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "EdtProfile" ? "active" : "")">
+                <i class="icon ion-ios-person"></i>
+                <span>Edit Profile</span>
+            </a>
+        </li><!-- nav-item -->
+        <li class="nav-item">
+            <a href="@Url.Action("Security", "Student")" class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "EditLoginInformation" ? "active" : "")">
+                <i class="icon ion-ios-gear"></i>
+                <span>Security</span>
+            </a>
+        </li><!-- nav-item -->
+        <li class="nav-item">
+            <a href="@Url.Action("Logout", "Auth")" class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Logout" ? "active" : "")">
+                <i class="icon ion-power"></i>
+                <span>Sign Out</span>
+            </a>
         </li><!-- nav-item -->
     </ul>
 </div><!-- sh-sideleft-menu -->
 <div class="sh-headpanel">
     <div class="sh-headpanel-left">
         <!-- START: HIDDEN IN MOBILE -->
-        <a href="" class="sh-icon-link">
+        <a href="@Url.Action("Index", "Home")" class="sh-icon-link">
             <div>
-                <i class="icon ion-ios-folder-outline"></i>
-                <span>Directory</span>
+                <i class="icon ion-grid"></i>
+                <span>My Courses</span>
             </div>
         </a>
-        <a href="" class="sh-icon-link">
+        <a href="@Url.Action("Add", "Home")" class="sh-icon-link">
             <div>
-                <i class="icon ion-ios-calendar-outline"></i>
-                <span>Events</span>
+                <i class="icon ion-plus"></i>
+                <span>Add Courses</span>
             </div>
         </a>
-        <a href="" class="sh-icon-link">
+        <a href="@Url.Action("EditProfile", "Student")" class="sh-icon-link">
             <div>
-                <i class="icon ion-ios-gear-outline"></i>
-                <span>Settings</span>
+                <i class="icon ion-ios-person"></i>
+                <span>Edit Profile</span>
+            </div>
+        </a>
+        <a href="@Url.Action("Security", "Student")" class="sh-icon-link">
+            <div>
+                <i class="icon ion-ios-gear"></i>
+                <span>Security</span>
+            </div>
+        </a>
+        <a href="@Url.Action("Logout", "Auth")">
+            " class="sh-icon-link">
+            <div>
+                <i class="icon ion-power"></i>
+                <span>Sign Out</span>
             </div>
         </a>
         <!-- END: HIDDEN IN MOBILE -->
@@ -59,26 +87,42 @@
             <div class="dropdown-menu">
                 <div class="row no-gutters">
                     <div class="col-4">
-                        <a href="" class="dropdown-menu-link">
+                        <a href="@Url.Action("Index", "Home")" class="dropdown-menu-link">
                             <div>
-                                <i class="icon ion-ios-folder-outline"></i>
-                                <span>Directory</span>
+                                <i class="icon ion-grid"></i>
+                                <span>My Courses</span>
                             </div>
                         </a>
                     </div><!-- col-4 -->
                     <div class="col-4">
-                        <a href="" class="dropdown-menu-link">
+                        <a href="@Url.Action("Add", "Home")" class="dropdown-menu-link">
                             <div>
-                                <i class="icon ion-ios-calendar-outline"></i>
-                                <span>Events</span>
+                                <i class="icon ion-plus"></i>
+                                <span>Add Courses</span>
                             </div>
                         </a>
                     </div><!-- col-4 -->
                     <div class="col-4">
-                        <a href="" class="dropdown-menu-link">
+                        <a href="@Url.Action("EditProfile", "Student")" class="dropdown-menu-link">
                             <div>
-                                <i class="icon ion-ios-gear-outline"></i>
-                                <span>Settings</span>
+                                <i class="icon ion-ios-person"></i>
+                                <span>Edit Profile</span>
+                            </div>
+                        </a>
+                    </div><!-- col-4 -->
+                    <div class="col-4">
+                        <a href="@Url.Action("Security", "Student")" class="dropdown-menu-link">
+                            <div>
+                                <i class="icon ion-ios-gear"></i>
+                                <span>Security</span>
+                            </div>
+                        </a>
+                    </div><!-- col-4 -->
+                    <div class="col-4">
+                        <a href="@Url.Action("Logout", "Auth")" class="dropdown-menu-link">
+                            <div>
+                                <i class="icon ion-power"></i>
+                                <span>Sign Out</span>
                             </div>
                         </a>
                     </div><!-- col-4 -->
@@ -162,8 +206,8 @@
                 </div><!-- media -->
                 <hr>
                 <ul class="dropdown-profile-nav">
-                    <li><a href="@Url.Action("EditProfile", "Student", new { guid })"><i class="icon ion-ios-person"></i> Edit Profile</a></li>
-                    <li><a href="@Url.Action("EditLoginInformation", "Student", new { guid })"><i class="icon ion-ios-gear"></i> Edit Login Information</a></li>
+                    <li><a href="@Url.Action("EditProfile", "Student")"><i class="icon ion-ios-person"></i> Edit Profile</a></li>
+                    <li><a href="@Url.Action("Security", "Student")"><i class="icon ion-ios-gear"></i> Security</a></li>
                     <li><a href="@Url.Action("Logout", "Auth")"><i class="icon ion-power"></i> Sign Out</a></li>
                 </ul>
             </div><!-- dropdown-menu -->

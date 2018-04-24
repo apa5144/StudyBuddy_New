@@ -1,57 +1,114 @@
-﻿@model List<StudyBuddy.Models.Student>
+﻿@model  List<StudyBuddy.Models.RosterViewModel>
 
 @{
-    ViewBag.Title = "Student";
-    Layout = "~/Views/Shared/_Layout_DataTables.cshtml";
+    ViewBag.Title = "My Courses";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts {
+    <script>
+        function updateAvailability(sectionId) {
+            $.ajax({
+                url: '/Home/UpdateAvailability',
+                type: "POST",
+                dataType: "JSON",
+                data: { sectionId: sectionId }
+            })
+        };
+    </script>
 }
 
 <div class="sh-breadcrumb">
     <nav class="breadcrumb">
-        <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">Study Buddy</a>
-        <span class="breadcrumb-item active">Student List</span>
+        <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">StudyBuddy</a>
+        <span class="breadcrumb-item active">My Courses</span>
     </nav>
 </div><!-- sh-breadcrumb -->
 <div class="sh-pagetitle">
     <div class="input-group">
-        @*<input type="search" class="form-control" placeholder="Search">
-        <span class="input-group-btn">
-            <button class="btn"><i class="fa fa-search"></i></button>
-        </span>*@<!-- input-group-btn -->
     </div><!-- input-group -->
     <div class="sh-pagetitle-left">
-        <div class="sh-pagetitle-icon"><i class="icon ion-ios-home"></i></div>
+        <div class="sh-pagetitle-icon"><i class="icon ion-grid"></i></div>
         <div class="sh-pagetitle-title">
-            <span>List of all students</span>
+            <span>Find all the courses you have added here</span>
             <h2>@ViewBag.Title</h2>
         </div><!-- sh-pagetitle-left-title -->
     </div><!-- sh-pagetitle-left -->
 </div><!-- sh-pagetitle -->
 
+
 <div class="sh-pagebody">
-    <div class="table-wrapper">
-        <table id="datatable2" class="table display responsive nowrap">
-            <thead>
-            <tr>
-                <th class="wd-15p">Id</th>
-                <th class="wd-15p">First Name</th>
-                <th class="wd-20p">Last Name</th>
-                <th class="wd-20p">Availability</th>
-            </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    //if (item.Availability != false) //: If you want to filter the table by availability
-                    {
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => item.Id)</td>
-                        <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
-                        <td>@Html.DisplayFor(modelItem => item.LastName)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Availability)</td>
-                    </tr>
-                    }
-                }
-            </tbody>
-        </table>
-    </div><!-- table-wrapper -->
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3 mg-t-10">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center justify-content-between tx-white" style="background-color: @item.SectionColor">
+                        <h6 class="mg-b-0 tx-14 tx-white">@Html.DisplayFor(m => item.Title)</h6>
+                        <div>
+                            <div class="onoffswitch">
+                                @{ var type = string.Empty; if (item.SectionAvailability) { type = "checked"; } }
+                                <input type="checkbox" name="item.SectionAvailability" class="onoffswitch-checkbox @item.Subject@item.Section" id="@item.Subject@item.Section" onchange="updateAvailability(@item.SectionId)" @type>
+                                <label class="onoffswitch-label" for="@item.Subject@item.Section">
+                                    <span class="onoffswitch-inner"></span>
+                                    <span class="onoffswitch-switch"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="card-option tx-24">
+                            <div class="dropdown">
+                                <a href="" data-toggle="dropdown" class="tx-white"><i class="icon ion-more lh-0"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="@Url.Action("DeleteSection", "Home", new { item.SectionId })"><i class="icon ion-close lh-0"></i>  Delete</a>
+                                </div><!-- dropdown-menu -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        @{ var latestFive = StudyBuddy.Core.Helpers.GetLatestFive(item.SectionId, item.StudentId); }
+                        <h5 class="card-body-title">@Html.DisplayFor(m => item.Subject)</h5>
+                        <p class="card-subtitle tx-normal mg-b-15">Section: @Html.DisplayFor(m => item.Section)</p>
+                        <hr />
+                        <p class="card-text">Latest 5 students available to study:</p>
+
+                        <div class="table-responsive">
+                            <table class="table mg-b-0">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (!latestFive.Any())
+                                    {
+                                        <tr>
+                                            <td>There are currently no students available for studying. (∩︵∩)</td>
+                                            <td></td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        foreach (var latest in latestFive)
+                                        {
+                                            <tr>
+                                                <td>@Html.DisplayFor(m => latest.FirstName) @Html.DisplayFor(m => latest.LastName)</td>
+                                                <td>@Html.DisplayFor(m => latest.Email)</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <hr />
+                        <div class="card-footer bg-gray-400 tx-center">
+                            <a href="@Url.Action("ViewSection", "Home", new { item.SectionId })">View All</a>
+                        </div><!-- card-footer -->
+
+                    </div>
+                </div><!-- card -->
+            </div><!-- col -->
+
+                            }
+    </div>
 </div><!-- sh-pagebody -->

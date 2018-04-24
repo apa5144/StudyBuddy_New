@@ -91,8 +91,8 @@
       <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.AspNet.TelemetryCorrelation">
-      <HintPath>..\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.1\lib\net45\Microsoft.AspNet.TelemetryCorrelation.dll</HintPath>
+    <Reference Include="Microsoft.AspNet.TelemetryCorrelation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.0\lib\net45\Microsoft.AspNet.TelemetryCorrelation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.8.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -112,11 +112,11 @@
       <HintPath>..\packages\Microsoft.Owin.Security.4.0.0\lib\net451\Microsoft.Owin.Security.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security.Cookies">
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Security.Cookies.4.0.0\lib\net451\Microsoft.Owin.Security.Cookies.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security.OAuth">
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Security.OAuth.4.0.0\lib\net451\Microsoft.Owin.Security.OAuth.dll</HintPath>
       <Private>True</Private>
     </Reference>
@@ -124,7 +124,7 @@
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NLog">
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.5.3\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
@@ -134,7 +134,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Diagnostics.DiagnosticSource">
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.4.1\lib\net45\System.Diagnostics.DiagnosticSource.dll</HintPath>
       <Private>True</Private>
     </Reference>
@@ -218,15 +218,18 @@
     <Compile Include="Core\AlertStyle.cs" />
     <Compile Include="Core\BaseController.cs" />
     <Compile Include="Core\Cryption.cs" />
+    <Compile Include="Core\CustomHelpers.cs" />
     <Compile Include="Core\Helpers.cs" />
     <Compile Include="Core\Mail.cs" />
     <Compile Include="Core\Overrides.cs" />
     <Compile Include="Core\WebUtilities.cs" />
     <Compile Include="DAL\Common\UnitOfWork.cs" />
+    <Compile Include="DAL\Interfaces\IHeader.cs" />
     <Compile Include="DAL\Interfaces\ICourse.cs" />
     <Compile Include="DAL\Interfaces\IRoster.cs" />
     <Compile Include="DAL\Interfaces\ISection.cs" />
     <Compile Include="DAL\Interfaces\IStudent.cs" />
+    <Compile Include="DAL\Services\Header.cs" />
     <Compile Include="DAL\Services\Section.cs" />
     <Compile Include="DAL\Services\Roster.cs" />
     <Compile Include="DAL\Services\Course.cs" />
@@ -234,16 +237,28 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AddCourseViewModel.cs" />
     <Compile Include="Models\Course.cs" />
+    <Compile Include="Models\HeaderViewModel.cs" />
     <Compile Include="Models\Roster.cs" />
+    <Compile Include="Models\RosterLatestFiveViewModel.cs" />
+    <Compile Include="Models\RosterViewModel.cs" />
+    <Compile Include="Models\SectionViewModel.cs" />
+    <Compile Include="Models\SecurityViewModel.cs" />
+    <Compile Include="Models\ViewRosterViewModel.cs" />
     <Compile Include="Models\Section.cs" />
     <Compile Include="Models\SecurityLevel.cs" />
     <Compile Include="Models\Student.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\EasyAutoComplete\easy-autocomplete.css" />
+    <Content Include="Content\EasyAutoComplete\easy-autocomplete.min.css" />
+    <Content Include="Content\EasyAutoComplete\easy-autocomplete.themes.css" />
+    <Content Include="Content\EasyAutoComplete\easy-autocomplete.themes.min.css" />
     <Content Include="Content\Shamcey\css\shamcey.css" />
     <Content Include="Content\Shamcey\datatables\jquery.dataTables.css" />
+    <Content Include="Content\Shamcey\datatables\rowReorder.dataTables.min.css" />
     <Content Include="Content\Shamcey\datatables\sort_asc.png" />
     <Content Include="Content\Shamcey\datatables\sort_asc_disabled.png" />
     <Content Include="Content\Shamcey\datatables\sort_both.png" />
@@ -255,6 +270,48 @@
     <Content Include="Content\Shamcey\Ionicons\fonts\ionicons.svg" />
     <Content Include="Content\Shamcey\perfect-scrollbar\css\perfect-scrollbar.css" />
     <Content Include="Content\Shamcey\select2\css\select2.min.css" />
+    <Content Include="Content\switchery.min.css" />
+    <Content Include="Content\themes\base\accordion.css" />
+    <Content Include="Content\themes\base\all.css" />
+    <Content Include="Content\themes\base\autocomplete.css" />
+    <Content Include="Content\themes\base\base.css" />
+    <Content Include="Content\themes\base\button.css" />
+    <Content Include="Content\themes\base\core.css" />
+    <Content Include="Content\themes\base\datepicker.css" />
+    <Content Include="Content\themes\base\dialog.css" />
+    <Content Include="Content\themes\base\draggable.css" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_444444_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_555555_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_777620_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_777777_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cc0000_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\themes\base\jquery-ui.css" />
+    <Content Include="Content\themes\base\jquery-ui.min.css" />
+    <Content Include="Content\themes\base\menu.css" />
+    <Content Include="Content\themes\base\progressbar.css" />
+    <Content Include="Content\themes\base\resizable.css" />
+    <Content Include="Content\themes\base\selectable.css" />
+    <Content Include="Content\themes\base\selectmenu.css" />
+    <Content Include="Content\themes\base\slider.css" />
+    <Content Include="Content\themes\base\sortable.css" />
+    <Content Include="Content\themes\base\spinner.css" />
+    <Content Include="Content\themes\base\tabs.css" />
+    <Content Include="Content\themes\base\theme.css" />
+    <Content Include="Content\themes\base\tooltip.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -279,6 +336,15 @@
     <Content Include="Content\Shamcey\Ionicons\fonts\ionicons.eot" />
     <Content Include="Content\Shamcey\Ionicons\fonts\ionicons.ttf" />
     <Content Include="Content\Shamcey\Ionicons\fonts\ionicons.woff" />
+    <Content Include="Content\EasyAutoComplete\maps\easy-autocomplete.css.map" />
+    <Content Include="Content\EasyAutoComplete\maps\easy-autocomplete.min.css.map" />
+    <Content Include="Content\EasyAutoComplete\maps\easy-autocomplete.themes.css.map" />
+    <Content Include="Content\EasyAutoComplete\maps\easy-autocomplete.themes.min.css.map" />
+    <None Include="Scripts\jquery-1.12.4.intellisense.js" />
+    <Content Include="Scripts\jquery-1.12.4.js" />
+    <Content Include="Scripts\jquery-1.12.4.min.js" />
+    <Content Include="Scripts\jquery-ui-1.12.1.js" />
+    <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
@@ -289,6 +355,7 @@
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\Shamcey\datatables-responsive\dataTables.responsive.js" />
+    <Content Include="Scripts\Shamcey\datatables\dataTables.rowReorder.min.js" />
     <Content Include="Scripts\Shamcey\datatables\jquery.dataTables.js" />
     <Content Include="Scripts\Shamcey\datatables\sort_asc.png" />
     <Content Include="Scripts\Shamcey\datatables\sort_asc_disabled.png" />
@@ -299,12 +366,15 @@
     <Content Include="Scripts\Shamcey\perfect-scrollbar\js\perfect-scrollbar.min.js" />
     <Content Include="Scripts\Shamcey\popper.js\popper.js" />
     <Content Include="Scripts\Shamcey\select2\js\select2.min.js" />
+    <Content Include="Scripts\switchery.min.js" />
     <Content Include="Scripts\umd\popper-utils.js" />
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -313,7 +383,7 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Auth\Error.cshtml" />
     <Content Include="Views\Shared\_Layout_DataTables.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />
     <Content Include="Scripts\umd\popper.js.map" />
@@ -327,6 +397,9 @@
     <Content Include="Views\Shared\_Layout_Login.cshtml" />
     <Content Include="Views\Auth\Login.cshtml" />
     <Content Include="Scripts\Shamcey\datatables-responsive\responsive.dataTables.scss" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\ViewSection.cshtml" />
+    <Content Include="Views\Student\Security.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -343,11 +416,12 @@
     <Content Include="Views\Shared\_Header.cshtml" />
     <Content Include="Views\Shared\_Meta.cshtml" />
     <Content Include="Views\Auth\Signup.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Student\EditProfile.cshtml" />
     <Content Include="Views\Auth\ForgotPassword.cshtml" />
     <Content Include="Views\Auth\ResetPassword.cshtml" />
     <Content Include="Views\Shared\Unauthorized.cshtml" />
+    <Content Include="Views\Home\Add.cshtml" />
+    <Content Include="Scripts\jquery-1.12.4.min.map" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

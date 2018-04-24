@@ -14,7 +14,7 @@ namespace StudyBuddy.DAL.Interfaces
 
         void Delete(int id);
 
-        Student Update(int id, string firstName, string lastName, long phoneNumber, bool availability, string profilePic);
+        Student Update(string guid, string firstName, string lastName, long phoneNumber, string profilePic);
 
         Student GetByCredentials(string email, string password);
 
@@ -22,7 +22,7 @@ namespace StudyBuddy.DAL.Interfaces
 
         void UpdatePasswordByGuid(string guid, string newPassword);
 
-        void UpdateEmailById(int id, string newEmail);
+        void UpdateEmailByGuid(string guid, string newEmail);
 
         void VerifyByGuid(string guid);
 
@@ -32,6 +32,12 @@ namespace StudyBuddy.DAL.Interfaces
 
         Student GetByEmail(string email);
 
-       void Deactivate(string guid);
+        void Deactivate(string guid);
+
+        SecurityViewModel GetSecurityInformationByGuid(string guid);
+
+        void RemoveProfilePictureByGuid(string guid);
+
+        void UpdateAvailabilityByGuid(string guid);
     }
 }
