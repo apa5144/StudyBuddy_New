@@ -176,10 +176,12 @@
                     <!-- loop starts here -->
                     @foreach (var item in notifications)
                     {
-                        var read = string.Empty; if (!StudyBuddy.Core.Helpers.IsSpecificNotificationRead(User, item.Id)) { read = "bg-gray-300"; }
+                        var notificationPicture = string.IsNullOrWhiteSpace(item.Picture) ? "noprofilepicture.jpg" : item.Picture;
+
+                            var read = string.Empty; if (!StudyBuddy.Core.Helpers.IsSpecificNotificationRead(User, item.Id)) { read = "bg-gray-300"; }
                         <a onclick='markAsRead(this, @item.Id)' href="@Url.Action("Index", "Notification")" class="media-list-link @read" id="notification_@item.Id">
                             <div class="media pd-x-20 pd-y-15">
-                                <img src="~/Content/UserProfilePictures/@item.Picture" class="wd-40 rounded-circle" alt="">
+                                <img src="~/Content/UserProfilePictures/@notificationPicture" class="wd-40 rounded-circle" alt="">
                                 <div class="media-body">
                                     @{ var body = item.Body; if (body.Length > 100) { body = body.Substring(0, 100); body = body + "..."; } }
                                     <p class="tx-13 mg-b-0">@Html.Raw(body)</p>
