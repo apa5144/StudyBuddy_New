@@ -84,7 +84,6 @@
                                 <thead>
                                     <tr>
                                         <th>Name</th>
-                                        <th>Email</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -93,7 +92,6 @@
                                     {
                                         <tr>
                                             <td>There are no students available.</td>
-                                            <td></td>
                                             <td></td>                                            
                                         </tr>                                        
                                     }
@@ -105,10 +103,9 @@
                                             var formattedText = "#" + item.Title;
                                             <tr>
                                                 <td>@Html.DisplayFor(m => latest.FirstName) @Html.DisplayFor(m => latest.LastName)</td>
-                                                <td>@Html.DisplayFor(m => latest.Email)</td>
-                                                <td><div id="text_@item.SectionId"><a href="#" data-toggle="modal" data-target="#modaldemo2">Poke</a></div></td>
+                                                <td><div id="text_@item.SectionId"><a href="#" data-toggle="modal" data-target="#modal_@item.SectionId">Poke</a></div></td>
                                             </tr>
-                                            <div id="modaldemo2" class="modal fade">
+                                            <div id="modal_@item.SectionId" class="modal fade">
                                                 <div class="modal-dialog modal-sm" role="document">
                                                     <div class="modal-content bd-0 tx-14">
                                                         <div class="modal-body pd-20">

@@ -69,9 +69,9 @@
                                 <td>@Html.DisplayFor(m => item.FirstName) @Html.DisplayFor(m => item.LastName)</td>
                                 <td>@Html.DisplayFor(m => item.Email, new { @type = "email" })</td>
                                 <td>@Html.DisplayForPhone(item.PhoneNumber.ToString())</td>
-                                <td><div id="text_@item.SectionId"><a href="#" data-toggle="modal" data-target="#modaldemo2">Poke</a></div></td>
+                                <td><div id="text_@item.SectionId"><a href="#" data-toggle="modal" data-target="#modal_@item.SectionId">Poke</a></div></td>
 
-                                <div id="modaldemo2" class="modal fade">
+                                <div id="modal_@item.SectionId" class="modal fade">
                                     <div class="modal-dialog modal-sm" role="document">
                                         <div class="modal-content bd-0 tx-14">
                                             <div class="modal-body pd-20">
