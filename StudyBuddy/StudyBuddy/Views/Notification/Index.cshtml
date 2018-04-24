@@ -1,0 +1,65 @@
+﻿@model  List<StudyBuddy.Models.NotificationViewModel>
+
+@{
+    ViewBag.Title = "Notifications";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts {
+    <script>
+        function updateAvailability(sectionId) {
+            $.ajax({
+                url: '/Home/UpdateAvailability',
+                type: "POST",
+                dataType: "JSON",
+                data: { sectionId: sectionId }
+            })
+        };
+    </script>
+}
+
+<div class="sh-breadcrumb">
+    <nav class="breadcrumb">
+        <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">StudyBuddy</a>
+        <span class="breadcrumb-item active">Notifications</span>
+    </nav>
+</div><!-- sh-breadcrumb -->
+<div class="sh-pagetitle">
+    <div class="input-group">
+    </div><!-- input-group -->
+    <div class="sh-pagetitle-left">
+        <div class="sh-pagetitle-icon"><i class="icon ion-ios-bell-outline"></i></div>
+        <div class="sh-pagetitle-title">
+            <span>Find all of your notifications here</span>
+            <h2>@ViewBag.Title</h2>
+        </div><!-- sh-pagetitle-left-title -->
+    </div><!-- sh-pagetitle-left -->
+</div><!-- sh-pagetitle -->
+
+
+<div class="sh-pagebody">
+    <div class="card card-mailbox">
+        <div class="card-header bg-primary">
+            <nav class="nav">
+                <a id="mailboxBack" href="" class="nav-link nav-back"><i class="fa fa-angle-left"></i></a>
+                <a class="nav-link active" data-toggle="tab">Notifications</a>
+            </nav>
+        </div><!-- card-header -->
+        <div class="card-body" style="position: unset !important; height: 500px;">
+            <div class="mailbox-left">
+                <div class="mailbox-list">
+                @foreach (var item in Model)
+                {
+                    <a class="media">
+                        <img src="~/Content/UserProfilePictures/@item.Picture" class="wd-50 rounded-circle" alt="">
+                        <div class="media-body mg-l-15">
+                            <h6 class="tx-13 mg-b-0">@Html.Raw(item.Body)</h6>
+                            <span class="d-block tx-12">@item.DateCreated</span>
+                        </div><!-- media-body -->
+                    </a><!-- media -->
+                }
+                </div><!-- mailbox-list -->
+            </div><!-- mailbox-left -->
+        </div><!-- card-body -->
+    </div><!-- card -->
+</div><!-- sh-pagebody -->

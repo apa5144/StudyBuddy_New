@@ -12195,15 +12195,13 @@ body {
   left: 0;
   z-index: 40;
 }
-@media (min-width: 768px) {
+@media () {
   .mailbox-left {
-    width: 260px;
     border-right: 1px solid #0866C6;
   }
 }
-@media (min-width: 992px) {
+@media () {
   .mailbox-left {
-    width: 300px;
   }
 }
 .mailbox-left .input-group {

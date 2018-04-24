@@ -1,0 +1,94 @@
+﻿@model  List<StudyBuddy.Models.ViewRosterViewModel>
+
+@{
+    ViewBag.Title = "Section Roster";
+    Layout = "~/Views/Shared/_Layout_DataTables.cshtml";
+}
+
+@section Scripts {
+    <script>
+        function sendPoke(Email, text) {
+            $.ajax({
+                url: '@Url.Action("Poke", "Home")',
+                type: "POST",
+                dataType: "JSON",
+                data: { email: Email },
+                success: $(text).replaceWith("<div>Poke sent!</div>")
+            });
+        };
+    </script>
+}
+
+
+<div class="sh-breadcrumb">
+    <nav class="breadcrumb">
+        <a class="breadcrumb-item" href="@Url.Action("Index", "Home")">StudyBuddy</a>
+        <span class="breadcrumb-item active">Section Roster</span>
+    </nav>
+</div><!-- sh-breadcrumb -->
+<div class="sh-pagetitle">
+    <div class="input-group">
+    </div><!-- input-group -->
+    <div class="sh-pagetitle-left">
+        <div class="sh-pagetitle-icon"><i class="icon ion-clipboard"></i></div>
+        <div class="sh-pagetitle-title">
+            <span>List of all students in @ViewBag.SectionSubject  @ViewBag.Section - @ViewBag.SectionTitle</span>
+            <h2>@ViewBag.Title</h2>
+        </div><!-- sh-pagetitle-left-title -->
+    </div><!-- sh-pagetitle-left -->
+</div><!-- sh-pagetitle -->
+
+<div class="sh-pagebody">
+    <div class="card bd-primary mg-t-20">
+        <div class="card-header bg-primary tx-white">@ViewBag.SectionSubject  @ViewBag.Section - @ViewBag.SectionTitle Roster</div>
+        <div class="card-body pd-sm-30">
+            @if (!Model.Any())
+            {
+                <p class="mg-b-20 mg-sm-b-30">Bummer, Looks like there are currently no students available for studying. (∩︵∩)</p>
+            }
+            else
+            {
+                <p class="mg-b-20 mg-sm-b-30">Good news, looks like there are more fellow students looking for a StudyBuddy as well!</p>
+                <p>Please use the provided information to reach them.</p>
+            }
+            <div class="table-wrapper">
+                <table id="datatable1" class="table display responsive nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th class="wd-15p">Name</th>
+                            <th class="wd-15p">Email</th>
+                            <th class="wd-15p">Phone Number</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            var formattedEmail = "'" + item.Email + "'";
+                            <tr>
+                                <td>@Html.DisplayFor(m => item.FirstName) @Html.DisplayFor(m => item.LastName)</td>
+                                <td>@Html.DisplayFor(m => item.Email, new { @type = "email" })</td>
+                                <td>@Html.DisplayForPhone(item.PhoneNumber.ToString())</td>
+                                <td><div id="text_@item.SectionId"><a href="#" data-toggle="modal" data-target="#modaldemo2">Poke</a></div></td>
+
+                                <div id="modaldemo2" class="modal fade">
+                                    <div class="modal-dialog modal-sm" role="document">
+                                        <div class="modal-content bd-0 tx-14">
+                                            <div class="modal-body pd-20">
+                                                <p class="mg-b-5">Would you like to poke @Html.DisplayFor(m => item.FirstName) @Html.DisplayFor(m => item.LastName)?</p>
+                                            </div>
+                                            <div class="modal-footer justify-content-center">
+                                                <button onclick='sendPoke(@formattedEmail, text_@item.SectionId)' type="button" class="btn btn-success pd-x-20 icon ion-paper-airplane" data-dismiss="modal"></button>
+                                                <button type="button" class="btn btn-secondary pd-x-20 icon ion-close" data-dismiss="modal"></button>
+                                            </div>
+                                        </div>
+                                    </div><!-- modal-dialog -->
+                                </div><!-- modal -->
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div><!-- table-wrapper -->
+        </div><!-- card-body -->
+    </div><!-- card -->
+</div><!-- sh-pagebody -->
