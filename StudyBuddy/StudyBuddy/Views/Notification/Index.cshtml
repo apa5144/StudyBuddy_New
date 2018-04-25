@@ -9,7 +9,7 @@
     <script>
         function updateAvailability(sectionId) {
             $.ajax({
-                url: '/Home/UpdateAvailability',
+                url: '@Url.Action("UpdateAvailability", "Home")',
                 type: "POST",
                 dataType: "JSON",
                 data: { sectionId: sectionId }

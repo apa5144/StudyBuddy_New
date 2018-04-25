@@ -11,7 +11,7 @@
     <script>
         function removeProfilePicture() {
             $.ajax({
-                url: '/Student/RemoveProfilePicture',
+                url: '@Url.Action("RemoveProfilePicture", "Student")',
                 type: "POST",
                 dataType: "JSON"                
             })
@@ -20,7 +20,7 @@
 
         function updateAvailability() {
             $.ajax({
-                url: '/Student/UpdateAvailability',
+                url: '@Url.Action("UpdateAvailability", "Student")',
                 type: "POST",
                 dataType: "JSON"
             })

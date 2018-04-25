@@ -11,7 +11,7 @@
             var options = {
                 source: function (request, response) {
                     $.ajax({
-                        url: "/Home/GetCourseByCriteriaAndGuid",
+                        url: "@Url.Action("GetCourseByCriteriaAndGuid", "Home")",
                         type: "GET",
                         dataType: "json",
                         data: { criteria: request.term },
@@ -52,7 +52,7 @@
         function FillSection(course, section) {
             var sectionId = $("#" + course).val();
             $.ajax({
-                url: '/Home/FillSection',
+                url: '@Url.Action("FillSection", "Home")',
                 type: "GET",
                 dataType: "JSON",
                 data: { section: sectionId },
