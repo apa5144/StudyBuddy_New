@@ -11,7 +11,7 @@
             var options = {
                 source: function (request, response) {
                     $.ajax({
-                        url: "/Home/GetCourseByCriteria",
+                        url: "/Home/GetCourseByCriteriaAndGuid",
                         type: "GET",
                         dataType: "json",
                         data: { criteria: request.term },

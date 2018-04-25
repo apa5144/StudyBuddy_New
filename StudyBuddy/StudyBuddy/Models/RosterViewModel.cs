@@ -11,6 +11,7 @@ namespace StudyBuddy.Models
         public string Section { get; set; }
         public bool SectionAvailability { get; set; }
         public string SectionColor { get; set; }
+        public string Instructor { get; set; }
 
         public RosterViewModel()
         {
@@ -21,6 +22,7 @@ namespace StudyBuddy.Models
             Section = string.Empty;
             SectionAvailability = default(bool);
             SectionColor = string.Empty;
+            Instructor = string.Empty;
         }
     }
 }

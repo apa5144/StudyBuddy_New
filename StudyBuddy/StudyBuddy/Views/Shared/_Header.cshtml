@@ -8,28 +8,28 @@
 }
 
 
-    <script>
-        function markAllRead() {
-            $.ajax({
-                url: '@Url.Action("MarkAllRead", "Notification")',
-                type: "POST",
-                dataType: "JSON",
-                success: $('[id^="notification_"]').removeClass("bg-gray-300")
-            })
-        };
+<script>
+    function markAllRead() {
+        $.ajax({
+            url: '@Url.Action("MarkAllRead", "Notification")',
+            type: "POST",
+            dataType: "JSON",
+            success: $('[id^="notification_"]').removeClass("bg-gray-300")
+        })
+    };
 
-        function markAsRead(event, notificationId) {
-            var ID = event.id;
-            $.ajax({
-                url: '@Url.Action("MarkAsRead", "Notification")',
-                type: "POST",
-                dataType: "JSON",
-                data: { notificationId: notificationId },
-                success: $("#" + ID).removeClass("bg-gray-300")
-            });
+    function markAsRead(event, notificationId) {
+        var ID = event.id;
+        $.ajax({
+            url: '@Url.Action("MarkAsRead", "Notification")',
+            type: "POST",
+            dataType: "JSON",
+            data: { notificationId: notificationId },
+            success: function () { $('[id^="notification_"]').removeClass("bg-gray-300"); $('#bell_notification').removeClass("square-8") }
+        });
 
-        };        
-    </script>
+    };
+</script>
 
 
 <div class="sh-logopanel">
@@ -164,7 +164,7 @@
                 <i class="icon ion-ios-bell-outline tx-24"></i>
                 @if (anyUnreadNotification)
                 {
-                    <span class="square-8"></span>
+                    <span class="square-8" id="bell_notification"></span>
                 }
             </a>
             <div class="dropdown-menu dropdown-menu-right">
@@ -178,19 +178,19 @@
                     {
                         var notificationPicture = string.IsNullOrWhiteSpace(item.Picture) ? "noprofilepicture.jpg" : item.Picture;
 
-                            var read = string.Empty; if (!StudyBuddy.Core.Helpers.IsSpecificNotificationRead(User, item.Id)) { read = "bg-gray-300"; }
+                        var read = string.Empty; if (!StudyBuddy.Core.Helpers.IsSpecificNotificationRead(User, item.Id)) { read = "bg-gray-300"; }
                         <a onclick='markAsRead(this, @item.Id)' href="@Url.Action("Index", "Notification")" class="media-list-link @read" id="notification_@item.Id">
                             <div class="media pd-x-20 pd-y-15">
                                 <img src="~/Content/UserProfilePictures/@notificationPicture" class="wd-hi-40 rounded-circle" alt="">
                                 <div class="media-body">
-                                    @{ var body = item.Body; if (body.Length > 100) { body = body.Substring(0, 100); body = body + "..."; } }
+                                    @{ var body = item.Body; if (body.Length > 130) { body = body.Substring(0, 130); body = body + "..."; } }
                                     <p class="tx-13 mg-b-0">@Html.Raw(body)</p>
                                     <span class="tx-12">@item.DateCreated</span>
                                 </div>
                             </div><!-- media -->
                         </a>
                     <!-- loop ends here -->
-                    }
+                                        }
                     <div class="media-list-footer">
                         <a href="@Url.Action("Index", "Notification")" class="tx-12"><i class="fa fa-angle-down mg-r-5"></i> Show All Notifications</a>
                     </div>

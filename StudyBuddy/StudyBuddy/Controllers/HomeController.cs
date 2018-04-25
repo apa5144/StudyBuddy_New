@@ -165,7 +165,7 @@ namespace StudyBuddy.Controllers
         }
 
         [HttpPost]
-        public JsonResult Poke(string email)
+        public JsonResult Poke(string email, string course)
         {
             if (string.IsNullOrWhiteSpace(email))
                 return Json(new { success = false });
@@ -177,7 +177,7 @@ namespace StudyBuddy.Controllers
             if (student == null)
                 return Json(new { success = false });
 
-            UnitOfWork.Notification.AddNotificationByGuidAndTargetEmail("<strong>" + student.FirstName + "</strong> has poked you. Looks like someone wants to study!", guid, email);
+            UnitOfWork.Notification.AddNotificationByGuidAndTargetEmail("<strong>" + student.FirstName + "</strong> from <strong>[" + course + "]</strong> has poked you. Looks like someone wants to study!", guid, email);
             return Json(new { success = true });
         }
 
@@ -191,9 +191,11 @@ namespace StudyBuddy.Controllers
             return Json(new { success = true });
         }
 
-        public JsonResult GetCourseByCriteria(string criteria)
+        public JsonResult GetCourseByCriteriaAndGuid(string criteria)
         {
-            var model = UnitOfWork.Course.GetByCriteria(criteria);
+            var guid = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var model = UnitOfWork.Course.GetByCriteriaAndGuid(criteria, guid);
 
             return Json(model, JsonRequestBehavior.AllowGet);
         }

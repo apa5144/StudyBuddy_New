@@ -16,13 +16,13 @@
             })
         };
 
-        function sendPoke(Email, text) {
+        function sendPoke(email, text, course) {
             $.ajax({
                 url: '@Url.Action("Poke", "Home")',
                 type: "POST",
                 dataType: "JSON",
-                data: { email: Email },
-                success: $(text).replaceWith("<div>Poke sent!</div>")
+                data: { email: email, course: course },
+                success: $(text).replaceWith("<div>Sent!</div>")
             });
         };
     </script>
@@ -53,7 +53,7 @@
             <div class="col-md-3 mg-t-10">
                 <div class="card">
                     <div class="card-header d-flex align-items-center justify-content-between tx-white" style="background-color: @item.SectionColor">
-                        <h6 class="mg-b-0 tx-14 tx-white">@Html.DisplayFor(m => item.Title)</h6>
+                        <h6 class="mg-b-0 tx-14 tx-white">@Html.DisplayFor(m => item.Subject)</h6>
                         <div>
                             <div class="onoffswitch">
                                 @{ var type = string.Empty; if (item.SectionAvailability) { type = "checked"; } }
@@ -75,8 +75,8 @@
                     </div>
                     <div class="card-body">
                         @{ var latestFive = StudyBuddy.Core.Helpers.GetLatestFive(item.SectionId, item.StudentId); }
-                        <h5 class="card-body-title">@Html.DisplayFor(m => item.Subject)</h5>
-                        <p class="card-subtitle tx-normal mg-b-15">Section: @Html.DisplayFor(m => item.Section) @Html.DisplayFor(m => item.SectionId)</p>
+                        <h5 class="card-body-title">@Html.DisplayFor(m => item.Title)</h5>
+                        <p class="card-subtitle tx-normal mg-b-15">Section: @Html.DisplayFor(m => item.Section) @Html.DisplayFor(m => item.SectionId)<br />Instructor: @Html.DisplayFor(m => item.Instructor)</p>
 
                         <p class="card-text">Latest 5 students available to study:</p>
                         <div class="table-responsive">
@@ -100,19 +100,20 @@
                                         foreach (var latest in latestFive)
                                         {
                                             var formattedEmail = "'" + latest.Email + "'";
-                                            var formattedText = "#" + item.Title;
+                                            var formattedCourse = "'" + item.Subject + "'";
+                                            var uniqueKey = @String.Format("{0:X6}", new Random((int)DateTime.Now.Ticks).Next(0x1000000));                                            
                                             <tr>
                                                 <td>@Html.DisplayFor(m => latest.FirstName) @Html.DisplayFor(m => latest.LastName)</td>
-                                                <td><div id="text_@item.SectionId"><a href="#" data-toggle="modal" data-target="#modal_@item.SectionId">Poke</a></div></td>
+                                                <td><div id="text_@uniqueKey"><a href="#" data-toggle="modal" data-target="#modal_@uniqueKey">Poke</a></div></td>
                                             </tr>
-                                            <div id="modal_@item.SectionId" class="modal fade">
+                                            <div id="modal_@uniqueKey" class="modal fade">
                                                 <div class="modal-dialog modal-sm" role="document">
                                                     <div class="modal-content bd-0 tx-14">
                                                         <div class="modal-body pd-20">
                                                             <p class="mg-b-5">Would you like to poke @Html.DisplayFor(m => latest.FirstName) @Html.DisplayFor(m => latest.LastName)?</p>
                                                         </div>
                                                         <div class="modal-footer justify-content-center">
-                                                            <button onclick='sendPoke(@formattedEmail, text_@item.SectionId)' type="button" class="btn btn-success pd-x-20 icon ion-paper-airplane" data-dismiss="modal"></button>
+                                                            <button onclick='sendPoke(@formattedEmail, text_@uniqueKey, @formattedCourse)' type="button" class="btn btn-success pd-x-20 icon ion-paper-airplane" data-dismiss="modal"></button>
                                                             <button type="button" class="btn btn-secondary pd-x-20 icon ion-close" data-dismiss="modal"></button>
                                                         </div>
                                                     </div>

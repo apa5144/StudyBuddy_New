@@ -7,13 +7,13 @@
 
 @section Scripts {
     <script>
-        function sendPoke(Email, text) {
+        function sendPoke(email, text, course) {
             $.ajax({
                 url: '@Url.Action("Poke", "Home")',
                 type: "POST",
                 dataType: "JSON",
-                data: { email: Email },
-                success: $(text).replaceWith("<div>Poke sent!</div>")
+                data: { email: email, course: course },
+                success: $(text).replaceWith("<div>Sent!</div>")
             });
         };
     </script>
@@ -65,20 +65,23 @@
                         @foreach (var item in Model)
                         {
                             var formattedEmail = "'" + item.Email + "'";
+                            var formattedCourse = "'" + ViewBag.SectionSubject + "'";
+                            var uniqueKey = @String.Format("{0:X6}", new Random((int)DateTime.Now.Ticks).Next(0x1000000));
+
                             <tr>
                                 <td>@Html.DisplayFor(m => item.FirstName) @Html.DisplayFor(m => item.LastName)</td>
                                 <td>@Html.DisplayFor(m => item.Email, new { @type = "email" })</td>
                                 <td>@Html.DisplayForPhone(item.PhoneNumber.ToString())</td>
-                                <td><div id="text_@item.SectionId"><a href="#" data-toggle="modal" data-target="#modal_@item.SectionId">Poke</a></div></td>
+                                <td><div id="text_@uniqueKey"><a href="#" data-toggle="modal" data-target="#modal_@uniqueKey">Poke</a></div></td>
 
-                                <div id="modal_@item.SectionId" class="modal fade">
+                                <div id="modal_@uniqueKey" class="modal fade">
                                     <div class="modal-dialog modal-sm" role="document">
                                         <div class="modal-content bd-0 tx-14">
                                             <div class="modal-body pd-20">
                                                 <p class="mg-b-5">Would you like to poke @Html.DisplayFor(m => item.FirstName) @Html.DisplayFor(m => item.LastName)?</p>
                                             </div>
                                             <div class="modal-footer justify-content-center">
-                                                <button onclick='sendPoke(@formattedEmail, text_@item.SectionId)' type="button" class="btn btn-success pd-x-20 icon ion-paper-airplane" data-dismiss="modal"></button>
+                                                <button onclick='sendPoke(@formattedEmail, text_@uniqueKey, @formattedCourse)' type="button" class="btn btn-success pd-x-20 icon ion-paper-airplane" data-dismiss="modal"></button>
                                                 <button type="button" class="btn btn-secondary pd-x-20 icon ion-close" data-dismiss="modal"></button>
                                             </div>
                                         </div>

@@ -15,6 +15,15 @@
                 data: { sectionId: sectionId }
             })
         };
+
+        function markAllRead() {
+            $.ajax({
+                url: '@Url.Action("MarkAllRead", "Notification")',
+                type: "POST",
+                dataType: "JSON",
+                success: function () { $('[id^="notification_"]').removeClass("bg-gray-300"); $('#bell_notification').removeClass("square-8") }
+            })
+        };
     </script>
 }
 
@@ -38,20 +47,23 @@
 
 
 <div class="sh-pagebody">
+    <a onclick='markAllRead()' href="#">Mark All as Read</a>
     <div class="card card-mailbox">
         <div class="card-header bg-primary">
             <nav class="nav">
                 <a id="mailboxBack" href="" class="nav-link nav-back"><i class="fa fa-angle-left"></i></a>
-                <a class="nav-link active" data-toggle="tab">Notifications</a>
-            </nav>
-        </div><!-- card-header -->
+                <a class="nav-link active" data-toggle="tab">Notifications</a>               
+            </nav>                     
+        </div><!-- card-header -->        
         <div class="card-body" style="position: unset !important; height: 500px;">
             <div class="mailbox-left">
                 <div class="mailbox-list">
                 @foreach (var item in Model)
                 {
+                    var read = string.Empty; if (!StudyBuddy.Core.Helpers.IsSpecificNotificationRead(User, item.Id)) { read = "bg-gray-300"; }
                     var notificationPicture = string.IsNullOrWhiteSpace(item.Picture) ? "noprofilepicture.jpg" : item.Picture;
-                    <a class="media">
+
+                    <a class="media @read" id="notification_@item.Id>
                         <img src="~/Content/UserProfilePictures/@notificationPicture" class="wd-hi-50 rounded-circle" alt="">
                         <div class="media-body mg-l-15">
                             <h6 class="tx-13 mg-b-0">@Html.Raw(item.Body)</h6>
