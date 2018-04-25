@@ -92,8 +92,8 @@
                                     {
                                         <tr>
                                             <td>There are no students available.</td>
-                                            <td></td>                                            
-                                        </tr>                                        
+                                            <td></td>
+                                        </tr>
                                     }
                                     else
                                     {
@@ -101,24 +101,26 @@
                                         {
                                             var formattedEmail = "'" + latest.Email + "'";
                                             var formattedCourse = "'" + item.Subject + "'";
-                                            var uniqueKey = @String.Format("{0:X6}", new Random((int)DateTime.Now.Ticks).Next(0x1000000));                                            
-                                            <tr>
-                                                <td>@Html.DisplayFor(m => latest.FirstName) @Html.DisplayFor(m => latest.LastName)</td>
-                                                <td><div id="text_@uniqueKey"><a href="#" data-toggle="modal" data-target="#modal_@uniqueKey">Poke</a></div></td>
-                                            </tr>
-                                            <div id="modal_@uniqueKey" class="modal fade">
-                                                <div class="modal-dialog modal-sm" role="document">
-                                                    <div class="modal-content bd-0 tx-14">
-                                                        <div class="modal-body pd-20">
-                                                            <p class="mg-b-5">Would you like to poke @Html.DisplayFor(m => latest.FirstName) @Html.DisplayFor(m => latest.LastName)?</p>
+                                            var uniqueKey = latest.Email.Replace("@", string.Empty).Replace(".", string.Empty);
+
+                                                <tr>
+                                                    <td>@Html.DisplayFor(m => latest.FirstName) @Html.DisplayFor(m => latest.LastName)</td>
+                                                    <td><div id="text_@uniqueKey"><a href="#" data-toggle="modal" data-target="#modal_@uniqueKey">Poke</a></div></td>
+                                                </tr>
+
+                                                <div id="modal_@uniqueKey" class="modal fade">
+                                                    <div class="modal-dialog modal-sm" role="document">
+                                                        <div class="modal-content bd-0 tx-14">
+                                                            <div class="modal-body pd-20">
+                                                                <p class="mg-b-5">Would you like to poke @Html.DisplayFor(m => latest.FirstName) @Html.DisplayFor(m => latest.LastName)?</p>
+                                                            </div>
+                                                            <div class="modal-footer justify-content-center">
+                                                                <button onclick='sendPoke(@formattedEmail, text_@uniqueKey, @formattedCourse)' type="button" class="btn btn-success pd-x-20 icon ion-paper-airplane" data-dismiss="modal"></button>
+                                                                <button type="button" class="btn btn-secondary pd-x-20 icon ion-close" data-dismiss="modal"></button>
+                                                            </div>
                                                         </div>
-                                                        <div class="modal-footer justify-content-center">
-                                                            <button onclick='sendPoke(@formattedEmail, text_@uniqueKey, @formattedCourse)' type="button" class="btn btn-success pd-x-20 icon ion-paper-airplane" data-dismiss="modal"></button>
-                                                            <button type="button" class="btn btn-secondary pd-x-20 icon ion-close" data-dismiss="modal"></button>
-                                                        </div>
-                                                    </div>
-                                                </div><!-- modal-dialog -->
-                                            </div><!-- modal -->
+                                                    </div><!-- modal-dialog -->
+                                                </div><!-- modal -->
                                         }
                                     }
                                 </tbody>
