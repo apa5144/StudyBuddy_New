@@ -79,7 +79,7 @@ namespace StudyBuddy.Controllers
                         model.ProfilePic = fileName;
                     }
                 }
-                if(string.IsNullOrWhiteSpace(model.ProfilePic))
+                if (string.IsNullOrWhiteSpace(model.ProfilePic))
                 {
                     var student = UnitOfWork.Student.GetOne(guid);
                     model.ProfilePic = student.ProfilePic;
@@ -126,16 +126,12 @@ namespace StudyBuddy.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            if (model.ChangeEmail)
+            if (!model.ChangeEmail && !model.ChangePassword)
             {
-                if (string.IsNullOrWhiteSpace(model.OldEmail) || string.IsNullOrWhiteSpace(model.NewEmail) || string.IsNullOrWhiteSpace(model.ConfirmEmail))
-                {
-                    Danger("Email fields are required and cannot be empty.");
-                    return View(model);
-                }
+                return View(model);
             }
 
-            if (model.ChangePassword)
+            if (!model.ChangeEmail && model.ChangePassword)
             {
                 if (string.IsNullOrWhiteSpace(model.OldPassword) || string.IsNullOrWhiteSpace(model.NewPassword) || string.IsNullOrWhiteSpace(model.ConfirmPassword))
                 {
@@ -149,6 +145,41 @@ namespace StudyBuddy.Controllers
                     return View(model);
                 }
             }
+
+            if (model.ChangeEmail && !model.ChangePassword)
+            {
+                if (string.IsNullOrWhiteSpace(model.OldEmail) || string.IsNullOrWhiteSpace(model.NewEmail) || string.IsNullOrWhiteSpace(model.ConfirmEmail))
+                {
+                    Danger("Email fields are required and cannot be empty.");
+                    return View(model);
+                }
+            }
+
+            if (model.ChangePassword)
+            {
+
+                if (string.IsNullOrWhiteSpace(model.OldPassword) || string.IsNullOrWhiteSpace(model.NewPassword) || string.IsNullOrWhiteSpace(model.ConfirmPassword))
+                {
+                    Danger("Password fields are required and cannot be empty.");
+                    return View(model);
+                }
+
+                if (model.NewPassword.Length < 6 || model.NewPassword.Length > 50)
+                {
+                    Danger("Password length must be at least 6 characters and no more than 50.");
+                    return View(model);
+                }
+
+            }
+
+            if(model.ChangeEmail)
+            {
+                if (string.IsNullOrWhiteSpace(model.OldEmail) || string.IsNullOrWhiteSpace(model.NewEmail) || string.IsNullOrWhiteSpace(model.ConfirmEmail))
+                {
+                    Danger("Email fields are required and cannot be empty.");
+                    return View(model);
+                }
+            }            
 
             var guid = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
 
@@ -164,7 +195,7 @@ namespace StudyBuddy.Controllers
                     else
                     {
                         var student = UnitOfWork.Student.GetOne(guid);
-                        UnitOfWork.Student.UpdateEmailByGuid(guid, model.NewEmail);                        
+                        UnitOfWork.Student.UpdateEmailByGuid(guid, model.NewEmail);
 
                         _mail.SendEmailChangeVerificationMail("do-not-reply@studybuddy.com", model.NewEmail, "Email Change Verification", guid, student.FirstName);
                     }

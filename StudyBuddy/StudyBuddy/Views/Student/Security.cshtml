@@ -87,7 +87,8 @@
                         <div class="row">
                             <label class="col-sm-4 form-control-label" for="OldEmail">Old Email: <span class="tx-danger">*</span></label>
                             <div class="col-sm-8 mg-t-10 mg-sm-t-0">
-                                @Html.TextBoxFor(m => m.OldEmail, new { @class = "form-control group1", @placeholder = "Enter old Email" })
+                                @{ if (Model.ChangeEmail) { <script type="text/javascript">window.addEventListener('load', function enable_cb2() { $("input.group1").removeAttr("disabled"); });</script> } }
+                                @Html.TextBoxFor(m => m.OldEmail, new { @class = "form-control group1", @placeholder = "Enter old Email"})
                                 @Html.ValidationMessageFor(m => m.OldEmail, "", new { @class = "text-danger" })
                             </div>
                         </div><!-- row -->
@@ -106,8 +107,9 @@
                             </div>
                         </div>
                         <div class="form-layout-footer mg-t-30">
+                            @{ var emailType = string.Empty; if (Model.ChangeEmail) { emailType = "checked"; } }
                             <label class="ckbox">
-                                <input id="group1" name="ChangeEmail" type="checkbox" value="true"><span>Change Email Information?</span>
+                                <input id="group1" name="ChangeEmail" type="checkbox" value="true" @emailType><span>Change Email Information?</span>
                             </label>
                         </div><!-- form-layout-footer -->
                     </div><!-- card-body -->
@@ -120,6 +122,7 @@
                         <div class="row row-xs">
                             <label class="col-sm-4 form-control-label" for="OldPassword">Old Password: <span class="tx-danger">*</span></label>
                             <div class="col-sm-8 mg-t-10 mg-sm-t-0">
+                                @{ if (Model.ChangePassword) { <script type="text/javascript">window.addEventListener('load', function enable_cb2() { $("input.group2").removeAttr("disabled"); });</script> } }
                                 @Html.TextBoxFor(m => m.OldPassword, new { @class = "form-control group2", @placeholder = "Enter old Password", @type = "password" })
                                 @Html.ValidationMessageFor(m => m.OldPassword, "", new { @class = "text-danger" })
                             </div>
@@ -139,8 +142,9 @@
                             </div>
                         </div>
                         <div class="form-layout-footer mg-t-30">
+                            @{ var passwordType = string.Empty; if (Model.ChangePassword) { passwordType = "checked"; } }
                             <label class="ckbox">
-                                <input id="group2" name="ChangePassword" type="checkbox" value="true"><span>Change Password Information?</span>
+                                <input id="group2" name="ChangePassword" type="checkbox" value="true" @passwordType><span>Change Password Information?</span>
                             </label>
                         </div><!-- form-layout-footer -->
                     </div><!-- card-body -->
